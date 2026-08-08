@@ -90,6 +90,7 @@
   /* ---------- hero ---------- */
   .hero{
     position:relative;
+    z-index:2;
     min-height:100vh;
     display:flex;
     flex-direction:column;
@@ -97,7 +98,28 @@
     padding-top:110px;
     overflow:hidden;
   }
-  .hero .container{will-change:transform, opacity;}
+  .hero-bg{
+    position:absolute; inset:0;
+    z-index:0;
+    overflow:hidden;
+    will-change:transform;
+  }
+  .hero-bg img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 34%;
+    filter:saturate(1.05) brightness(0.94);
+    transform:scale(1.1);
+    animation:kenBurns 24s ease-in-out infinite alternate;
+  }
+  @keyframes kenBurns{ from{transform:scale(1.06);} to{transform:scale(1.16);} }
+  .hero-scrim{
+    position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(180deg, rgba(23,19,16,0.35) 0%, rgba(23,19,16,0.58) 48%, var(--bg-night) 97%),
+      linear-gradient(100deg, rgba(23,19,16,0.5), rgba(23,19,16,0.1) 42%, rgba(23,19,16,0.45));
+  }
+  .hero .container{position:relative; z-index:3; will-change:transform, opacity;}
   .hero .eyebrow{
     font-size:0.78rem;
     letter-spacing:0.22em;
@@ -152,7 +174,7 @@
   .skyline{
     position:absolute; bottom:0; left:0; width:100%;
     height:140px;
-    z-index:1;
+    z-index:2;
     will-change:transform;
   }
   .skyline svg{width:100%; height:100%; display:block;}
@@ -253,6 +275,25 @@
     will-change:transform;
   }
   .phase.tilting{transition:transform .15s ease-out;}
+  .phase-media{
+    margin:-36px -36px 26px;
+    aspect-ratio:16/10;
+    position:relative;
+    overflow:hidden;
+  }
+  .phase-media img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .9s var(--ease);
+  }
+  .phase:hover .phase-media img{transform:scale(1.07);}
+  .phase-media::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(23,19,16,0) 50%, rgba(23,19,16,0.7) 100%);
+    pointer-events:none;
+  }
   .phase::after{
     content:'';
     position:absolute; inset:0;
@@ -362,18 +403,30 @@
     border-radius:4px;
     position:relative;
     overflow:hidden;
-    background:
-      radial-gradient(circle at 30% 20%, rgba(227,166,91,0.18), transparent 55%),
-      linear-gradient(160deg, #241d17, #171310 70%);
+    background:#171310;
     --rx:0deg; --ry:0deg; --tscale:1; --mx:50%; --my:50%;
     transform:perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--tscale));
     transition:transform .7s var(--ease), border-color .4s ease, box-shadow .5s var(--ease);
     will-change:transform;
   }
   .map-card.tilting{transition:transform .15s ease-out;}
+  .map-card img{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    filter:saturate(1.08);
+    transition:transform .9s var(--ease);
+  }
+  .map-card:hover img{transform:scale(1.06);}
+  .map-card-scrim{
+    position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(180deg, rgba(23,19,16,0.1) 0%, rgba(23,19,16,0.2) 45%, rgba(23,19,16,0.88) 100%),
+      radial-gradient(circle at 30% 20%, rgba(227,166,91,0.14), transparent 55%);
+  }
   .map-card::after{
     content:'';
-    position:absolute; inset:0;
+    position:absolute; inset:0; z-index:3;
     background:radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,0.14), transparent 55%);
     opacity:0;
     transition:opacity .5s ease;
@@ -387,6 +440,7 @@
   }
   .map-card .pin{
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    z-index:2;
     width:14px; height:14px; border-radius:50%; background:var(--amber);
     box-shadow:0 0 0 0 rgba(227,166,91,0.6);
     animation:pulse 2.4s infinite;
@@ -398,7 +452,8 @@
   }
   .map-card .cap{
     position:absolute; bottom:24px; left:24px; right:24px;
-    font-size:0.78rem; color:var(--muted); letter-spacing:0.03em;
+    z-index:2;
+    font-size:0.78rem; color:var(--cream); opacity:0.85; letter-spacing:0.03em;
   }
 
   /* ---------- footer ---------- */
@@ -442,6 +497,13 @@
 </nav>
 
 <section class="hero">
+  <div class="hero-bg">
+    <picture>
+      <source srcset="img/hero-aura.webp" type="image/webp">
+      <img src="img/hero-aura.jpg" width="1600" height="1067" alt="Rincón colonial de Comayagua, de día soleado a noche cálida" loading="eager" fetchpriority="high">
+    </picture>
+  </div>
+  <div class="hero-scrim"></div>
   <div class="container">
     <span class="eyebrow">Comayagua · La Antañona</span>
     <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
@@ -469,6 +531,12 @@
       <div class="parallax" data-speed="0.06">
         <div class="reveal card-pop">
           <div class="phase day tilt">
+            <div class="phase-media">
+              <picture>
+                <source srcset="img/day-cafe.webp" type="image/webp">
+                <img src="img/day-cafe.jpg" width="1100" height="733" alt="Barista preparando un pour-over en la barra de Aura" loading="lazy">
+              </picture>
+            </div>
             <div class="ph-label"><span class="dot"></span>07:00 — 17:00</div>
             <h3>La cafetería</h3>
             <p>Barra de especialidad, método por método. Mesas para trabajar, leer o encontrarte con alguien con calma. El aroma del tueste marca el ritmo de la mañana.</p>
@@ -482,6 +550,12 @@
       <div class="parallax" data-speed="-0.07">
         <div class="reveal card-pop delay-2">
           <div class="phase night tilt">
+            <div class="phase-media">
+              <picture>
+                <source srcset="img/night-bar.webp" type="image/webp">
+                <img src="img/night-bar.jpg" width="1100" height="733" alt="Espresso martini sobre la barra de cocteles de Aura por la noche" loading="lazy">
+              </picture>
+            </div>
             <div class="ph-label"><span class="dot"></span>17:00 — 22:00</div>
             <h3>La barra</h3>
             <p>Las mismas mesas, otra luz. Coctelería de autor, copas de vino y una selección que acompaña la conversación hasta tarde.</p>
@@ -588,6 +662,11 @@
       <div class="parallax" data-speed="0.08">
         <div class="reveal card-pop">
           <div class="map-card tilt">
+            <picture>
+              <source srcset="img/location-plaza.webp" type="image/webp">
+              <img src="img/location-plaza.jpg" width="900" height="1350" alt="Parque Central de Comayagua al anochecer" loading="lazy">
+            </picture>
+            <div class="map-card-scrim"></div>
             <div class="pin"></div>
             <div class="cap">Comayagua, Honduras — a pasos del Parque Central</div>
           </div>
@@ -631,6 +710,7 @@
   const glow = document.getElementById('glow');
   const heroEl = document.querySelector('.hero');
   const heroInner = document.querySelector('.hero .container');
+  const heroBg = document.querySelector('.hero-bg');
   const skyline = document.querySelector('.skyline');
   const navEl = document.querySelector('nav');
   const parallaxEls = Array.from(document.querySelectorAll('.parallax')).map(el=>({
@@ -674,8 +754,11 @@
       if(heroEl && heroInner){
         const heroH = heroEl.offsetHeight || vh;
         const hp = Math.min(Math.max(scrollY / (heroH * 0.9), 0), 1);
-        heroInner.style.transform = `translate3d(0, ${(scrollY * 0.26).toFixed(1)}px, 0) scale(${(1 - hp * 0.06).toFixed(3)})`;
+        heroInner.style.transform = `translate3d(0, ${(scrollY * 0.16).toFixed(1)}px, 0) scale(${(1 - hp * 0.06).toFixed(3)})`;
         heroInner.style.opacity = String(Math.max(1 - hp * 1.15, 0));
+      }
+      if(heroBg){
+        heroBg.style.transform = `translate3d(0, ${Math.min(scrollY * 0.32, 240).toFixed(1)}px, 0)`;
       }
       if(skyline){
         skyline.style.transform = `translate3d(0, ${(scrollY * 0.12).toFixed(1)}px, 0)`;
