@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Coffee — Comayagua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-day: #EFE6D8;
+    --bg-night: #171310;
+    --amber: #E3A65B;
+    --amber-soft: #F1C48A;
+    --copper: #B5603A;
+    --wine: #7A2E3A;
+    --cream: #F5EEE1;
+    --ink: #1B1611;
+    --muted: #8A7B68;
+    --line: rgba(245,238,225,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-night);
+    color:var(--cream);
+    font-family:'Sora', sans-serif;
+    font-weight:400;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  .container{max-width:1120px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- glow blob (signature element) ---------- */
+  #glow{
+    position:fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    pointer-events:none;
+    z-index:0;
+    background:radial-gradient(560px circle at var(--gx,50%) var(--gy,20%), rgba(227,166,91,0.35), rgba(227,166,91,0) 60%);
+    transition:background 1.2s ease;
+    mix-blend-mode:screen;
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 28px;
+    backdrop-filter:blur(6px);
+    background:linear-gradient(to bottom, rgba(23,19,16,0.65), transparent);
+  }
+  .logotype{
+    font-family:'Fraunces', serif;
+    font-size:1.35rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--cream);
+  }
+  .logotype em{font-style:italic; color:var(--amber-soft);}
+  nav .links{display:flex; gap:32px; font-size:0.82rem; letter-spacing:0.04em; text-transform:uppercase;}
+  nav .links a{opacity:0.75; transition:opacity .3s;}
+  nav .links a:hover{opacity:1;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:110px;
+    overflow:hidden;
+  }
+  .hero .eyebrow{
+    font-size:0.78rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--amber-soft);
+    margin-bottom:22px;
+    opacity:0;
+    animation:riseIn 1s ease forwards .2s;
+  }
+  .hero h1{
+    font-size:clamp(3.2rem, 9vw, 7.2rem);
+    line-height:0.92;
+    color:var(--cream);
+    opacity:0;
+    animation:riseIn 1.1s ease forwards .35s;
+  }
+  .hero h1 .it{font-style:italic; color:var(--amber);}
+  .hero p.sub{
+    max-width:480px;
+    margin-top:26px;
+    font-size:1.08rem;
+    line-height:1.6;
+    color:var(--cream);
+    opacity:0;
+    animation:riseIn 1s ease forwards .55s;
+  }
+  .hero p.sub strong{color:var(--amber-soft); font-weight:500;}
+  .hero-cta{
+    display:flex; gap:16px; margin-top:40px;
+    opacity:0;
+    animation:riseIn 1s ease forwards .75s;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 26px;
+    font-size:0.85rem; letter-spacing:0.04em; text-transform:uppercase;
+    border-radius:2px;
+    transition:transform .35s ease, background .35s ease, color .35s ease;
+  }
+  .btn-solid{background:var(--amber); color:var(--ink);}
+  .btn-solid:hover{transform:translateY(-2px); background:var(--amber-soft);}
+  .btn-line{border:1px solid var(--line); color:var(--cream);}
+  .btn-line:hover{border-color:var(--amber-soft); color:var(--amber-soft);}
+
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* skyline silhouette of colonial rooftops */
+  .skyline{
+    position:absolute; bottom:0; left:0; width:100%;
+    height:140px;
+    z-index:1;
+  }
+  .skyline svg{width:100%; height:100%; display:block;}
+
+  /* ---------- day/night narrative ---------- */
+  .story{
+    position:relative;
+    padding:160px 0;
+    z-index:2;
+  }
+  .story-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .story-head{
+    grid-column:1 / -1;
+    margin-bottom:80px;
+    max-width:640px;
+  }
+  .story-head .tag{
+    font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--amber-soft);
+    display:block; margin-bottom:18px;
+  }
+  .story-head h2{
+    font-size:clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height:1.08;
+    color:var(--cream);
+  }
+  .story-head h2 .it{font-style:italic; color:var(--amber);}
+
+  .phase{
+    padding:36px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:rgba(245,238,225,0.02);
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .phase.in{opacity:1; transform:translateY(0);}
+  .phase .ph-label{
+    font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:18px;
+  }
+  .phase .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .phase.day .dot{background:var(--amber);}
+  .phase.night .dot{background:var(--wine);}
+  .phase.day .ph-label{color:var(--amber-soft);}
+  .phase.night .ph-label{color:#c98fa0;}
+  .phase h3{font-size:1.7rem; margin-bottom:14px; color:var(--cream);}
+  .phase p{color:var(--muted); line-height:1.7; font-size:0.98rem;}
+  .phase .items{margin-top:22px; display:flex; flex-wrap:wrap; gap:10px;}
+  .phase .items span{
+    font-size:0.78rem; padding:7px 13px; border:1px solid var(--line); border-radius:20px; color:var(--cream); opacity:0.8;
+  }
+
+  /* ---------- menu (accordion) ---------- */
+  .menu-section{
+    position:relative;
+    padding:100px 0 160px;
+    z-index:2;
+  }
+  .menu-section .story-head{margin-bottom:56px;}
+  .accordion{border-top:1px solid var(--line);}
+  .acc-item{border-bottom:1px solid var(--line);}
+  .acc-trigger{
+    width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 4px;
+    background:none; border:none; cursor:pointer;
+    color:var(--cream); text-align:left;
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+  }
+  .acc-trigger .num{font-family:'Sora',sans-serif; font-size:0.78rem; color:var(--muted); margin-right:18px;}
+  .acc-trigger .plus{
+    font-family:'Sora', sans-serif;
+    font-size:1.4rem;
+    color:var(--amber-soft);
+    transition:transform .4s ease;
+  }
+  .acc-item.open .acc-trigger .plus{transform:rotate(45deg);}
+  .acc-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .5s ease;
+  }
+  .acc-item.open .acc-panel{max-height:600px;}
+  .acc-panel-inner{padding:0 4px 34px;}
+  .menu-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:12px 0;
+    border-bottom:1px dashed var(--line);
+    font-size:0.95rem;
+  }
+  .menu-row:last-child{border-bottom:none;}
+  .menu-row .name{color:var(--cream);}
+  .menu-row .desc{display:block; color:var(--muted); font-size:0.8rem; margin-top:3px;}
+  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px;}
+
+  /* ---------- location ---------- */
+  .location{
+    position:relative; z-index:2;
+    padding:120px 0;
+    border-top:1px solid var(--line);
+  }
+  .loc-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+  .loc-grid h2{font-size:clamp(2rem,4vw,3rem); margin-bottom:24px;}
+  .loc-grid h2 .it{font-style:italic; color:var(--amber);}
+  .loc-list{display:flex; flex-direction:column; gap:22px; margin-top:32px;}
+  .loc-list .row{display:flex; gap:18px; align-items:flex-start;}
+  .loc-list .row .k{
+    font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--amber-soft); width:90px; flex-shrink:0; padding-top:2px;
+  }
+  .loc-list .row .v{color:var(--cream); line-height:1.6;}
+  .loc-list .row .v span{display:block; color:var(--muted); font-size:0.86rem;}
+
+  .map-card{
+    aspect-ratio:4/5;
+    border:1px solid var(--line);
+    border-radius:4px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(227,166,91,0.18), transparent 55%),
+      linear-gradient(160deg, #241d17, #171310 70%);
+  }
+  .map-card .pin{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:14px; height:14px; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 0 0 rgba(227,166,91,0.6);
+    animation:pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(227,166,91,0.55);}
+    70%{box-shadow:0 0 0 26px rgba(227,166,91,0);}
+    100%{box-shadow:0 0 0 0 rgba(227,166,91,0);}
+  }
+  .map-card .cap{
+    position:absolute; bottom:24px; left:24px; right:24px;
+    font-size:0.78rem; color:var(--muted); letter-spacing:0.03em;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    position:relative; z-index:2;
+    border-top:1px solid var(--line);
+    padding:56px 0 40px;
+  }
+  .foot-grid{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;
+  }
+  .foot-grid .logotype{font-size:1.1rem;}
+  .foot-links{display:flex; gap:26px; font-size:0.82rem;}
+  .foot-links a{opacity:0.7; transition:opacity .3s;}
+  .foot-links a:hover{opacity:1; color:var(--amber-soft);}
+  .foot-note{margin-top:30px; font-size:0.72rem; color:var(--muted); letter-spacing:0.02em;}
+
+  @media(max-width:860px){
+    .story-grid, .loc-grid{grid-template-columns:1fr;}
+    nav .links{display:none;}
+    .map-card{aspect-ratio:16/10;}
+  }
+</style>
+</head>
+<body>
+
+<div id="glow"></div>
+
+<nav>
+  <div class="logotype">A<em>ura</em></div>
+  <div class="links">
+    <a href="#historia">Historia</a>
+    <a href="#menu">Menú</a>
+    <a href="#ubicacion">Ubicación</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Comayagua · La Antañona</span>
+    <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
+    <p class="sub">A pasos del parque central, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>coctelería y música</strong> cuando cae el sol.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn btn-solid">Ver el menú</a>
+      <a href="#ubicacion" class="btn btn-line">Cómo llegar</a>
+    </div>
+  </div>
+  <div class="skyline">
+    <svg viewBox="0 0 1200 140" preserveAspectRatio="none">
+      <path d="M0,140 L0,90 L40,90 L40,60 L60,60 L60,90 L100,90 L100,45 L120,20 L140,45 L140,90 L190,90 L190,70 L220,70 L220,90 L270,90 L270,50 L290,50 L290,30 L310,30 L310,50 L330,50 L330,90 L400,90 L400,65 L430,65 L430,90 L480,90 L480,40 L500,15 L520,40 L520,90 L580,90 L580,72 L610,72 L610,90 L660,90 L660,55 L680,55 L680,35 L700,35 L700,55 L720,55 L720,90 L790,90 L790,68 L820,68 L820,90 L880,90 L880,42 L900,18 L920,42 L920,90 L980,90 L980,75 L1010,75 L1010,90 L1060,90 L1060,58 L1080,58 L1080,90 L1130,90 L1130,72 L1160,72 L1160,90 L1200,90 L1200,140 Z" fill="#171310"/>
+    </svg>
+  </div>
+</section>
+
+<section class="story" id="historia">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-head">
+        <span class="tag">Dos ritmos, un solo lugar</span>
+        <h2>El mismo rincón, <span class="it">dos auras</span> distintas.</h2>
+      </div>
+
+      <div class="phase day">
+        <div class="ph-label"><span class="dot"></span>07:00 — 17:00</div>
+        <h3>La cafetería</h3>
+        <p>Barra de especialidad, método por método. Mesas para trabajar, leer o encontrarte con alguien con calma. El aroma del tueste marca el ritmo de la mañana.</p>
+        <div class="items">
+          <span>Espresso</span><span>Pour-over</span><span>Cold brew</span><span>Repostería</span>
+        </div>
+      </div>
+
+      <div class="phase night">
+        <div class="ph-label"><span class="dot"></span>17:00 — 22:00</div>
+        <h3>La barra</h3>
+        <p>Las mismas mesas, otra luz. Coctelería de autor, copas de vino y una selección que acompaña la conversación hasta tarde.</p>
+        <div class="items">
+          <span>Coctelería</span><span>Vinos</span><span>Tabla de quesos</span><span>Música en vivo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-section" id="menu">
+  <div class="container">
+    <div class="story-head">
+      <span class="tag">Carta</span>
+      <h2>Lo que sirve <span class="it">Aura</span></h2>
+    </div>
+
+    <div class="accordion">
+
+      <div class="acc-item open">
+        <button class="acc-trigger">
+          <span><span class="num">01</span>Café</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Espresso<span class="desc">Doble, tueste de la casa</span></span><span class="price">L 45</span></div>
+            <div class="menu-row"><span class="name">Cappuccino<span class="desc">Leche vaporizada, canela opcional</span></span><span class="price">L 60</span></div>
+            <div class="menu-row"><span class="name">Pour-over<span class="desc">Origen Comayagua, rotativo</span></span><span class="price">L 75</span></div>
+            <div class="menu-row"><span class="name">Cold brew<span class="desc">Reposo 18 horas</span></span><span class="price">L 65</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">02</span>Bebidas frías</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Matcha latte<span class="desc">Con leche de coco</span></span><span class="price">L 70</span></div>
+            <div class="menu-row"><span class="name">Limonada de romero<span class="desc">Hecha en casa</span></span><span class="price">L 50</span></div>
+            <div class="menu-row"><span class="name">Frappé Aura<span class="desc">Espresso, caramelo, canela</span></span><span class="price">L 75</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">03</span>Coctelería</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Espresso martini<span class="desc">La firma de la casa</span></span><span class="price">L 180</span></div>
+            <div class="menu-row"><span class="name">Old fashioned<span class="desc">Bourbon, bitters de naranja</span></span><span class="price">L 190</span></div>
+            <div class="menu-row"><span class="name">Copa de vino<span class="desc">Tinto o blanco, consultar carta</span></span><span class="price">L 150</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">04</span>Postres</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Cheesecake de temporada<span class="desc">Receta rotativa</span></span><span class="price">L 85</span></div>
+            <div class="menu-row"><span class="name">Croissant de almendra<span class="desc">Horneado diario</span></span><span class="price">L 55</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="location" id="ubicacion">
+  <div class="container">
+    <div class="loc-grid">
+      <div>
+        <span class="tag">Visítanos</span>
+        <h2>En el centro de <span class="it">la Antañona</span></h2>
+        <div class="loc-list">
+          <div class="row">
+            <div class="k">Dirección</div>
+            <div class="v">A pasos del Parque Central<span>Comayagua, Honduras</span></div>
+          </div>
+          <div class="row">
+            <div class="k">Horario</div>
+            <div class="v">Lun – Sáb, 7:00 am – 10:00 pm<span>Domingo, 8:00 am – 5:00 pm</span></div>
+          </div>
+          <div class="row">
+            <div class="k">Contacto</div>
+            <div class="v">+504 0000-0000<span>@aura_coffee_hn</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="map-card">
+        <div class="pin"></div>
+        <div class="cap">Comayagua, Honduras — a pasos del Parque Central</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="logotype">A<em>ura</em></div>
+      <div class="foot-links">
+        <a href="#" target="_blank">Instagram</a>
+        <a href="#" target="_blank">Facebook</a>
+        <a href="#ubicacion">Ubicación</a>
+      </div>
+    </div>
+    <div class="foot-note">© 2026 Aura Coffee — Comayagua, Honduras.</div>
+  </div>
+</footer>
+
+<script>
+  // glow follows scroll: shifts from warm amber (day) near top
+  // to deeper wine tone (night) as user scrolls into the bar section
+  const glow = document.getElementById('glow');
+  const nightSection = document.querySelector('.phase.night');
+  const dayColor = ['227,166,91'];
+  const nightColor = ['122,46,58'];
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function onScroll(){
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = Math.min(Math.max(window.scrollY / docH, 0), 1);
+    // color shift concentrated across the story section
+    const dayRGB = [227,166,91];
+    const nightRGB = [122,46,58];
+    const t = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
+    const r = Math.round(lerp(dayRGB[0], nightRGB[0], t));
+    const g = Math.round(lerp(dayRGB[1], nightRGB[1], t));
+    const b = Math.round(lerp(dayRGB[2], nightRGB[2], t));
+    glow.style.background = `radial-gradient(620px circle at 50% ${20 + p*10}%, rgba(${r},${g},${b},0.32), rgba(${r},${g},${b},0) 60%)`;
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // reveal phases on scroll
+  const phases = document.querySelectorAll('.phase');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, {threshold:0.25});
+  phases.forEach(p=>io.observe(p));
+
+  // accordion
+  document.querySelectorAll('.acc-trigger').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen){ item.classList.add('open'); }
+    });
+  });
+</script>
+
+</body>
+</html>
