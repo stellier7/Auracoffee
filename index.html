@@ -1,237 +1,574 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auracoffee — A Third Place Worth Investing In</title>
-  <meta name="description" content="Auracoffee is a specialty coffee house designed to be a neighborhood's favorite third place. Discover our story, our space, and the opportunity to be part of it." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Coffee — Comayagua</title>
+<meta name="description" content="Aura Coffee — Comayagua. Café de especialidad de día, coctelería y música al caer la noche, a pasos del Parque Central.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-day: #EFE6D8;
+    --bg-night: #171310;
+    --amber: #E3A65B;
+    --amber-soft: #F1C48A;
+    --copper: #B5603A;
+    --wine: #7A2E3A;
+    --cream: #F5EEE1;
+    --ink: #1B1611;
+    --muted: #8A7B68;
+    --line: rgba(245,238,225,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-night);
+    color:var(--cream);
+    font-family:'Sora', sans-serif;
+    font-weight:400;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  .container{max-width:1120px; margin:0 auto; padding:0 28px;}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  /* ---------- glow blob (signature element) ---------- */
+  #glow{
+    position:fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    pointer-events:none;
+    z-index:0;
+    background:radial-gradient(560px circle at var(--gx,50%) var(--gy,20%), rgba(227,166,91,0.35), rgba(227,166,91,0) 60%);
+    transition:background 1.2s ease;
+    mix-blend-mode:screen;
+  }
 
-  <link rel="stylesheet" href="styles.css" />
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 28px;
+    backdrop-filter:blur(6px);
+    background:linear-gradient(to bottom, rgba(23,19,16,0.65), transparent);
+  }
+  .logotype{
+    font-family:'Fraunces', serif;
+    font-size:1.35rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--cream);
+  }
+  .logotype em{font-style:italic; color:var(--amber-soft);}
+  nav .links{display:flex; gap:32px; font-size:0.82rem; letter-spacing:0.04em; text-transform:uppercase;}
+  nav .links a{opacity:0.75; transition:opacity .3s;}
+  nav .links a:hover{opacity:1;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:110px;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .hero-bg img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 65%;
+  }
+  .hero-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(23,19,16,0.55) 0%, rgba(23,19,16,0.55) 40%, rgba(23,19,16,0.95) 100%),
+      linear-gradient(90deg, rgba(23,19,16,0.55) 0%, rgba(23,19,16,0.15) 45%, rgba(23,19,16,0.55) 100%);
+  }
+  .hero .container{position:relative; z-index:2;}
+  .hero .eyebrow{
+    font-size:0.78rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--amber-soft);
+    margin-bottom:22px;
+    opacity:0;
+    animation:riseIn 1s ease forwards .2s;
+  }
+  .hero h1{
+    font-size:clamp(3.2rem, 9vw, 7.2rem);
+    line-height:0.92;
+    color:var(--cream);
+    opacity:0;
+    animation:riseIn 1.1s ease forwards .35s;
+  }
+  .hero h1 .it{font-style:italic; color:var(--amber);}
+  .hero p.sub{
+    max-width:480px;
+    margin-top:26px;
+    font-size:1.08rem;
+    line-height:1.6;
+    color:var(--cream);
+    opacity:0;
+    animation:riseIn 1s ease forwards .55s;
+  }
+  .hero p.sub strong{color:var(--amber-soft); font-weight:500;}
+  .hero-cta{
+    display:flex; gap:16px; margin-top:40px;
+    opacity:0;
+    animation:riseIn 1s ease forwards .75s;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 26px;
+    font-size:0.85rem; letter-spacing:0.04em; text-transform:uppercase;
+    border-radius:2px;
+    transition:transform .35s ease, background .35s ease, color .35s ease;
+  }
+  .btn-solid{background:var(--amber); color:var(--ink);}
+  .btn-solid:hover{transform:translateY(-2px); background:var(--amber-soft);}
+  .btn-line{border:1px solid var(--line); color:var(--cream);}
+  .btn-line:hover{border-color:var(--amber-soft); color:var(--amber-soft);}
+
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* skyline silhouette of colonial rooftops */
+  .skyline{
+    position:absolute; bottom:0; left:0; width:100%;
+    height:140px;
+    z-index:1;
+  }
+  .skyline svg{width:100%; height:100%; display:block;}
+
+  /* ---------- day/night narrative ---------- */
+  .story{
+    position:relative;
+    padding:160px 0;
+    z-index:2;
+  }
+  .story-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .story-head{
+    grid-column:1 / -1;
+    margin-bottom:80px;
+    max-width:640px;
+  }
+  .story-head .tag{
+    font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--amber-soft);
+    display:block; margin-bottom:18px;
+  }
+  .story-head h2{
+    font-size:clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height:1.08;
+    color:var(--cream);
+  }
+  .story-head h2 .it{font-style:italic; color:var(--amber);}
+
+  .phase{
+    padding:36px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:rgba(245,238,225,0.02);
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .phase.in{opacity:1; transform:translateY(0);}
+  .phase-photo{
+    aspect-ratio:4/3;
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:26px;
+  }
+  .phase-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+  .phase .ph-label{
+    font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:18px;
+  }
+  .phase .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .phase.day .dot{background:var(--amber);}
+  .phase.night .dot{background:var(--wine);}
+  .phase.day .ph-label{color:var(--amber-soft);}
+  .phase.night .ph-label{color:#c98fa0;}
+  .phase h3{font-size:1.7rem; margin-bottom:14px; color:var(--cream);}
+  .phase p{color:var(--muted); line-height:1.7; font-size:0.98rem;}
+  .phase .items{margin-top:22px; display:flex; flex-wrap:wrap; gap:10px;}
+  .phase .items span{
+    font-size:0.78rem; padding:7px 13px; border:1px solid var(--line); border-radius:20px; color:var(--cream); opacity:0.8;
+  }
+
+  /* ---------- menu (accordion) ---------- */
+  .menu-section{
+    position:relative;
+    padding:100px 0 160px;
+    z-index:2;
+  }
+  .menu-section .story-head{margin-bottom:56px;}
+  .accordion{border-top:1px solid var(--line);}
+  .acc-item{border-bottom:1px solid var(--line);}
+  .acc-trigger{
+    width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 4px;
+    background:none; border:none; cursor:pointer;
+    color:var(--cream); text-align:left;
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+  }
+  .acc-trigger .num{font-family:'Sora',sans-serif; font-size:0.78rem; color:var(--muted); margin-right:18px;}
+  .acc-trigger .plus{
+    font-family:'Sora', sans-serif;
+    font-size:1.4rem;
+    color:var(--amber-soft);
+    transition:transform .4s ease;
+  }
+  .acc-item.open .acc-trigger .plus{transform:rotate(45deg);}
+  .acc-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .5s ease;
+  }
+  .acc-item.open .acc-panel{max-height:600px;}
+  .acc-panel-inner{padding:0 4px 34px;}
+  .menu-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:12px 0;
+    border-bottom:1px dashed var(--line);
+    font-size:0.95rem;
+  }
+  .menu-row:last-child{border-bottom:none;}
+  .menu-row .name{color:var(--cream);}
+  .menu-row .desc{display:block; color:var(--muted); font-size:0.8rem; margin-top:3px;}
+  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px;}
+
+  /* ---------- location ---------- */
+  .location{
+    position:relative; z-index:2;
+    padding:120px 0;
+    border-top:1px solid var(--line);
+  }
+  .loc-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+  .loc-grid h2{font-size:clamp(2rem,4vw,3rem); margin-bottom:24px;}
+  .loc-grid h2 .it{font-style:italic; color:var(--amber);}
+  .loc-list{display:flex; flex-direction:column; gap:22px; margin-top:32px;}
+  .loc-list .row{display:flex; gap:18px; align-items:flex-start;}
+  .loc-list .row .k{
+    font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--amber-soft); width:90px; flex-shrink:0; padding-top:2px;
+  }
+  .loc-list .row .v{color:var(--cream); line-height:1.6;}
+  .loc-list .row .v span{display:block; color:var(--muted); font-size:0.86rem;}
+
+  .map-card{
+    aspect-ratio:4/5;
+    border:1px solid var(--line);
+    border-radius:4px;
+    position:relative;
+    overflow:hidden;
+  }
+  .map-card img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+  }
+  .map-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(227,166,91,0.22), transparent 55%),
+      linear-gradient(180deg, rgba(23,19,16,0.15) 0%, rgba(23,19,16,0.85) 100%);
+  }
+  .map-card .pin{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:14px; height:14px; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 0 0 rgba(227,166,91,0.6);
+    animation:pulse 2.4s infinite;
+    z-index:1;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(227,166,91,0.55);}
+    70%{box-shadow:0 0 0 26px rgba(227,166,91,0);}
+    100%{box-shadow:0 0 0 0 rgba(227,166,91,0);}
+  }
+  .map-card .cap{
+    position:absolute; bottom:24px; left:24px; right:24px;
+    font-size:0.78rem; color:var(--muted); letter-spacing:0.03em;
+    z-index:1;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    position:relative; z-index:2;
+    border-top:1px solid var(--line);
+    padding:56px 0 40px;
+  }
+  .foot-grid{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;
+  }
+  .foot-grid .logotype{font-size:1.1rem;}
+  .foot-links{display:flex; gap:26px; font-size:0.82rem;}
+  .foot-links a{opacity:0.7; transition:opacity .3s;}
+  .foot-links a:hover{opacity:1; color:var(--amber-soft);}
+  .foot-note{margin-top:30px; font-size:0.72rem; color:var(--muted); letter-spacing:0.02em;}
+
+  @media(max-width:860px){
+    .story-grid, .loc-grid{grid-template-columns:1fr;}
+    nav .links{display:none;}
+    .map-card{aspect-ratio:16/10;}
+  }
+</style>
 </head>
 <body>
 
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a class="brand" href="#top">
-        <span class="brand-mark">A</span>
-        <span class="brand-name">Auracoffee</span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <a href="#gallery">The Space</a>
-        <a href="#story">Our Story</a>
-        <a href="#difference">Why Us</a>
-        <a href="#opportunity">The Opportunity</a>
-        <a href="#contact" class="nav-cta">Get the Deck</a>
-      </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+<div id="glow"></div>
+
+<nav>
+  <div class="logotype">A<em>ura</em></div>
+  <div class="links">
+    <a href="#historia">Historia</a>
+    <a href="#menu">Menú</a>
+    <a href="#ubicacion">Ubicación</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <!-- FOTO DE PORTADA: reemplaza este src con tu propia foto del local -->
+  <div class="hero-bg">
+    <img src="assets/images/aura-hero.jpg" alt="Fachada de Aura Coffee al anochecer, Comayagua">
+  </div>
+  <div class="container">
+    <span class="eyebrow">Comayagua · La Antañona</span>
+    <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
+    <p class="sub">A pasos del parque central, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>coctelería y música</strong> cuando cae el sol.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn btn-solid">Ver el menú</a>
+      <a href="#ubicacion" class="btn btn-line">Cómo llegar</a>
     </div>
-  </header>
+  </div>
+  <div class="skyline">
+    <svg viewBox="0 0 1200 140" preserveAspectRatio="none">
+      <path d="M0,140 L0,90 L40,90 L40,60 L60,60 L60,90 L100,90 L100,45 L120,20 L140,45 L140,90 L190,90 L190,70 L220,70 L220,90 L270,90 L270,50 L290,50 L290,30 L310,30 L310,50 L330,50 L330,90 L400,90 L400,65 L430,65 L430,90 L480,90 L480,40 L500,15 L520,40 L520,90 L580,90 L580,72 L610,72 L610,90 L660,90 L660,55 L680,55 L680,35 L700,35 L700,55 L720,55 L720,90 L790,90 L790,68 L820,68 L820,90 L880,90 L880,42 L900,18 L920,42 L920,90 L980,90 L980,75 L1010,75 L1010,90 L1060,90 L1060,58 L1080,58 L1080,90 L1130,90 L1130,72 L1160,72 L1160,90 L1200,90 L1200,140 Z" fill="#171310"/>
+    </svg>
+  </div>
+</section>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-media">
-        <img src="assets/images/auracoffee-exterior.jpg" alt="Auracoffee storefront glowing warmly at dusk" />
-        <div class="hero-scrim"></div>
+<section class="story" id="historia">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-head">
+        <span class="tag">Dos ritmos, un solo lugar</span>
+        <h2>El mismo rincón, <span class="it">dos auras</span> distintas.</h2>
       </div>
-      <div class="container hero-inner">
-        <p class="eyebrow reveal">A neighborhood coffee house, reimagined</p>
-        <h1 class="reveal">Every neighborhood deserves<br class="lg-only" /> a place like <em>Aura</em>.</h1>
-        <p class="hero-sub reveal">
-          Auracoffee blends specialty coffee, warm design, and genuine community
-          into one welcoming room — the kind of place people build their week around.
-        </p>
-        <div class="hero-actions reveal">
-          <a href="#opportunity" class="btn btn-primary">See the Opportunity</a>
-          <a href="#gallery" class="btn btn-ghost">Walk Through the Space</a>
-        </div>
-        <div class="hero-stats reveal">
-          <div><span class="stat-num" data-count="1200">0</span><span class="stat-label">weekly regulars</span></div>
-          <div><span class="stat-num" data-count="4.9">0</span><span class="stat-label">average review rating</span></div>
-          <div><span class="stat-num" data-count="38">0</span><span class="stat-label">% repeat visits / week</span></div>
-        </div>
-      </div>
-      <a class="scroll-cue" href="#gallery" aria-label="Scroll to gallery">
-        <span></span>
-      </a>
-    </section>
 
-    <!-- GALLERY -->
-    <section class="section gallery" id="gallery">
-      <div class="container">
-        <p class="eyebrow reveal">Take a look inside</p>
-        <h2 class="reveal">The space, in a few frames.</h2>
-        <p class="section-lede reveal">
-          A quick tour of Auracoffee — from the warm glow of the storefront to the corner
-          seat everyone secretly claims as their own. Swap these for your own photos any time.
-        </p>
-
-        <div class="gallery-grid reveal">
-          <figure class="gallery-item span-2">
-            <img src="assets/images/auracoffee-interior.jpg" alt="Warm, welcoming interior seating area at Auracoffee" loading="lazy" />
-            <figcaption>The main room — warm wood, soft light, room to linger.</figcaption>
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/images/auracoffee-barista.jpg" alt="Barista pouring latte art at Auracoffee" loading="lazy" />
-            <figcaption>Craft in every cup.</figcaption>
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/images/auracoffee-pastries.jpg" alt="Fresh pastries and pour-over coffee at Auracoffee" loading="lazy" />
-            <figcaption>Baked fresh, daily.</figcaption>
-          </figure>
-          <figure class="gallery-item span-2">
-            <img src="assets/images/auracoffee-lounge.jpg" alt="Cozy window lounge seating at Auracoffee" loading="lazy" />
-            <figcaption>The window seat everyone wants.</figcaption>
-          </figure>
+      <div class="phase day">
+        <!-- FOTO DE DÍA: reemplaza este src con tu propia foto del café de día -->
+        <div class="phase-photo">
+          <img src="assets/images/aura-day.jpg" alt="Interior de Aura Coffee durante el día">
         </div>
-        <p class="gallery-note reveal">📸 Placeholder photography — drop your real venue shots into <code>/assets/images</code> and update the <code>src</code> attributes in <code>index.html</code> to make this yours.</p>
-      </div>
-    </section>
-
-    <!-- STORY -->
-    <section class="section story" id="story">
-      <div class="container story-grid">
-        <div class="story-media reveal">
-          <img src="assets/images/auracoffee-interior.jpg" alt="Guests enjoying Auracoffee's interior" loading="lazy" />
-        </div>
-        <div class="story-copy reveal">
-          <p class="eyebrow">Our story</p>
-          <h2>Coffee is the excuse. Community is the point.</h2>
-          <p>
-            Auracoffee started with a simple idea: the best neighborhoods have a place
-            where everyone already knows to show up — no invitation needed. We build
-            rooms, menus, and rituals designed around that feeling, then back it with
-            genuinely excellent coffee sourced from growers we know by name.
-          </p>
-          <p>
-            Every detail — the lighting, the playlist, the seating you can sink into for
-            three hours guilt-free — is chosen to make people want to stay a little
-            longer, and come back a little sooner.
-          </p>
-          <ul class="story-points">
-            <li>Direct-trade beans, roasted in small batches</li>
-            <li>Design-led spaces built for lingering, not turnover</li>
-            <li>A loyalty program people actually use</li>
-          </ul>
+        <div class="ph-label"><span class="dot"></span>07:00 — 17:00</div>
+        <h3>La cafetería</h3>
+        <p>Barra de especialidad, método por método. Mesas para trabajar, leer o encontrarte con alguien con calma. El aroma del tueste marca el ritmo de la mañana.</p>
+        <div class="items">
+          <span>Espresso</span><span>Pour-over</span><span>Cold brew</span><span>Repostería</span>
         </div>
       </div>
-    </section>
 
-    <!-- WHY US / DIFFERENTIATORS -->
-    <section class="section difference" id="difference">
-      <div class="container">
-        <p class="eyebrow reveal">Why Auracoffee wins</p>
-        <h2 class="reveal">Built to be someone's favorite place.</h2>
-        <div class="cards reveal">
-          <div class="card">
-            <div class="card-icon">☕</div>
-            <h3>Uncompromising Coffee</h3>
-            <p>Seasonal, direct-trade beans and a menu built with working baristas, not just marketers.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon">🏠</div>
-            <h3>A True Third Place</h3>
-            <p>Spaces designed for staying — comfortable seating, good light, and zero pressure to leave.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon">🌱</div>
-            <h3>Sourced With Care</h3>
-            <p>Transparent, sustainable sourcing relationships that respect growers and the planet.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon">📈</div>
-            <h3>Proven Retention</h3>
-            <p>A loyalty and events program that keeps guests coming back multiple times a week.</p>
-          </div>
+      <div class="phase night">
+        <!-- FOTO DE NOCHE: reemplaza este src con tu propia foto del bar de noche -->
+        <div class="phase-photo">
+          <img src="assets/images/aura-night.jpg" alt="Interior de Aura Coffee transformado en bar por la noche">
         </div>
-      </div>
-    </section>
-
-    <!-- OPPORTUNITY / PITCH -->
-    <section class="section opportunity" id="opportunity">
-      <div class="container opportunity-inner">
-        <p class="eyebrow reveal">The opportunity</p>
-        <h2 class="reveal">A pitch you can move on quickly.</h2>
-        <p class="section-lede reveal">
-          Auracoffee is raising to open its next location and deepen roots in the
-          community it already serves. Here's the shape of the opportunity — full
-          financials and projections are in the deck.
-        </p>
-
-        <div class="opportunity-grid reveal">
-          <div class="opp-metric">
-            <span class="opp-value" data-count="250000" data-prefix="$">0</span>
-            <span class="opp-label">Raise target</span>
-          </div>
-          <div class="opp-metric">
-            <span class="opp-value" data-count="18" data-suffix=" mo">0</span>
-            <span class="opp-label">Projected payback</span>
-          </div>
-          <div class="opp-metric">
-            <span class="opp-value" data-count="2" data-prefix="+">0</span>
-            <span class="opp-label">New locations planned</span>
-          </div>
-          <div class="opp-metric">
-            <span class="opp-value" data-count="42" data-prefix="+" data-suffix="%">0</span>
-            <span class="opp-label">Y/Y revenue growth</span>
-          </div>
+        <div class="ph-label"><span class="dot"></span>17:00 — 22:00</div>
+        <h3>La barra</h3>
+        <p>Las mismas mesas, otra luz. Coctelería de autor, copas de vino y una selección que acompaña la conversación hasta tarde.</p>
+        <div class="items">
+          <span>Coctelería</span><span>Vinos</span><span>Tabla de quesos</span><span>Música en vivo</span>
         </div>
-
-        <div class="opportunity-note reveal">
-          <p><strong>Note:</strong> these are placeholder figures — swap in your real numbers in <code>index.html</code> (look for <code>data-count</code>) before sharing this page externally.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT / CTA -->
-    <section class="section contact" id="contact">
-      <div class="container contact-inner">
-        <p class="eyebrow reveal">Let's talk</p>
-        <h2 class="reveal">Want the full deck, or a visit in person?</h2>
-        <p class="section-lede reveal">Leave your details and we'll follow up with the investor deck, financials, and a time to see the space for yourself.</p>
-
-        <form class="contact-form reveal" id="pitchForm">
-          <div class="form-row">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Jane Doe" required />
-          </div>
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="jane@email.com" required />
-          </div>
-          <div class="form-row">
-            <label for="message">Message <span class="optional">(optional)</span></label>
-            <textarea id="message" name="message" rows="3" placeholder="Tell us a bit about your interest..."></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Request the Deck</button>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="brand footer-brand">
-        <span class="brand-mark">A</span>
-        <span class="brand-name">Auracoffee</span>
-      </div>
-      <p>&copy; <span id="year"></span> Auracoffee. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#gallery">The Space</a>
-        <a href="#story">Our Story</a>
-        <a href="#opportunity">The Opportunity</a>
-        <a href="#contact">Contact</a>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<section class="menu-section" id="menu">
+  <div class="container">
+    <div class="story-head">
+      <span class="tag">Carta</span>
+      <h2>Lo que sirve <span class="it">Aura</span></h2>
+    </div>
+
+    <div class="accordion">
+
+      <div class="acc-item open">
+        <button class="acc-trigger">
+          <span><span class="num">01</span>Café</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Espresso<span class="desc">Doble, tueste de la casa</span></span><span class="price">L 45</span></div>
+            <div class="menu-row"><span class="name">Cappuccino<span class="desc">Leche vaporizada, canela opcional</span></span><span class="price">L 60</span></div>
+            <div class="menu-row"><span class="name">Pour-over<span class="desc">Origen Comayagua, rotativo</span></span><span class="price">L 75</span></div>
+            <div class="menu-row"><span class="name">Cold brew<span class="desc">Reposo 18 horas</span></span><span class="price">L 65</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">02</span>Bebidas frías</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Matcha latte<span class="desc">Con leche de coco</span></span><span class="price">L 70</span></div>
+            <div class="menu-row"><span class="name">Limonada de romero<span class="desc">Hecha en casa</span></span><span class="price">L 50</span></div>
+            <div class="menu-row"><span class="name">Frappé Aura<span class="desc">Espresso, caramelo, canela</span></span><span class="price">L 75</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">03</span>Coctelería</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Espresso martini<span class="desc">La firma de la casa</span></span><span class="price">L 180</span></div>
+            <div class="menu-row"><span class="name">Old fashioned<span class="desc">Bourbon, bitters de naranja</span></span><span class="price">L 190</span></div>
+            <div class="menu-row"><span class="name">Copa de vino<span class="desc">Tinto o blanco, consultar carta</span></span><span class="price">L 150</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger">
+          <span><span class="num">04</span>Postres</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="menu-row"><span class="name">Cheesecake de temporada<span class="desc">Receta rotativa</span></span><span class="price">L 85</span></div>
+            <div class="menu-row"><span class="name">Croissant de almendra<span class="desc">Horneado diario</span></span><span class="price">L 55</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="location" id="ubicacion">
+  <div class="container">
+    <div class="loc-grid">
+      <div>
+        <span class="tag">Visítanos</span>
+        <h2>En el centro de <span class="it">la Antañona</span></h2>
+        <div class="loc-list">
+          <div class="row">
+            <div class="k">Dirección</div>
+            <div class="v">A pasos del Parque Central<span>Comayagua, Honduras</span></div>
+          </div>
+          <div class="row">
+            <div class="k">Horario</div>
+            <div class="v">Lun – Sáb, 7:00 am – 10:00 pm<span>Domingo, 8:00 am – 5:00 pm</span></div>
+          </div>
+          <div class="row">
+            <div class="k">Contacto</div>
+            <div class="v">+504 0000-0000<span>@aura_coffee_hn</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- FOTO DE UBICACIÓN: reemplaza este src con una foto real de la fachada -->
+      <div class="map-card">
+        <img src="assets/images/aura-location.jpg" alt="Fachada de Aura Coffee cerca del Parque Central de Comayagua">
+        <div class="pin"></div>
+        <div class="cap">Comayagua, Honduras — a pasos del Parque Central</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="logotype">A<em>ura</em></div>
+      <div class="foot-links">
+        <a href="#" target="_blank">Instagram</a>
+        <a href="#" target="_blank">Facebook</a>
+        <a href="#ubicacion">Ubicación</a>
+      </div>
+    </div>
+    <div class="foot-note">© 2026 Aura Coffee — Comayagua, Honduras.</div>
+  </div>
+</footer>
+
+<script>
+  // glow follows scroll: shifts from warm amber (day) near top
+  // to deeper wine tone (night) as user scrolls into the bar section
+  const glow = document.getElementById('glow');
+  const nightSection = document.querySelector('.phase.night');
+  const dayColor = ['227,166,91'];
+  const nightColor = ['122,46,58'];
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function onScroll(){
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = Math.min(Math.max(window.scrollY / docH, 0), 1);
+    // color shift concentrated across the story section
+    const dayRGB = [227,166,91];
+    const nightRGB = [122,46,58];
+    const t = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
+    const r = Math.round(lerp(dayRGB[0], nightRGB[0], t));
+    const g = Math.round(lerp(dayRGB[1], nightRGB[1], t));
+    const b = Math.round(lerp(dayRGB[2], nightRGB[2], t));
+    glow.style.background = `radial-gradient(620px circle at 50% ${20 + p*10}%, rgba(${r},${g},${b},0.32), rgba(${r},${g},${b},0) 60%)`;
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // reveal phases on scroll
+  const phases = document.querySelectorAll('.phase');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, {threshold:0.25});
+  phases.forEach(p=>io.observe(p));
+
+  // accordion
+  document.querySelectorAll('.acc-trigger').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen){ item.classList.add('open'); }
+    });
+  });
+</script>
+
 </body>
 </html>
