@@ -80,6 +80,26 @@
     padding-top:110px;
     overflow:hidden;
   }
+  .hero-bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .hero-bg img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 35%;
+  }
+  .hero-bg::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(to right, rgba(23,19,16,0.92) 0%, rgba(23,19,16,0.72) 42%, rgba(23,19,16,0.35) 100%),
+      linear-gradient(to top, rgba(23,19,16,0.95) 0%, rgba(23,19,16,0.2) 45%, rgba(23,19,16,0.55) 100%);
+  }
+  .hero .container{position:relative; z-index:2;}
   .hero .eyebrow{
     font-size:0.78rem;
     letter-spacing:0.22em;
@@ -315,6 +335,9 @@
 </nav>
 
 <section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="images/hero.jpeg" alt="">
+  </div>
   <div class="container">
     <span class="eyebrow">Comayagua · La Antañona</span>
     <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
