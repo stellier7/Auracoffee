@@ -264,7 +264,7 @@
     overflow:hidden;
     transition:max-height .5s ease;
   }
-  .acc-item.open .acc-panel{max-height:600px;}
+  .acc-item.open .acc-panel{max-height:2200px;}
   .acc-panel-inner{padding:0 4px 34px;}
   .menu-row{
     display:flex; justify-content:space-between; align-items:baseline;
@@ -275,7 +275,25 @@
   .menu-row:last-child{border-bottom:none;}
   .menu-row .name{color:var(--cream);}
   .menu-row .desc{display:block; color:var(--muted); font-size:0.8rem; margin-top:3px;}
-  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px;}
+  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px; text-align:right;}
+  .menu-subhead{
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--amber-soft);
+    margin:18px 0 6px;
+  }
+  .menu-subhead:first-child{margin-top:0;}
+  .menu-sizes{
+    display:flex; justify-content:flex-end; gap:18px;
+    font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:4px; padding-right:2px;
+  }
+  .menu-sizes span{min-width:3.2rem; text-align:right;}
+  .menu-row .price.dual{
+    display:flex; gap:18px; font-style:normal; font-family:'Fraunces', serif;
+  }
+  .menu-row .price.dual span{min-width:3.2rem; text-align:right; font-style:italic;}
 
   /* ---------- gallery carousel ---------- */
   .gallery{
@@ -495,9 +513,9 @@
 
 <section class="hero">
   <div class="container">
-    <span class="eyebrow">Comayagua · Colonia El Invá</span>
+    <span class="eyebrow">Comayagua · Col. Inva</span>
     <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
-    <p class="sub">Cerca del Hotel Palmerola, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>coctelería y música</strong> cuando cae el sol.</p>
+    <p class="sub">Cerca del Hotel Palmerola, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>crepas, waffles y más</strong> cuando apetece quedarse.</p>
     <div class="hero-cta">
       <a href="#menu" class="btn btn-solid">Ver el menú</a>
       <a href="#ubicacion" class="btn btn-line">Cómo llegar</a>
@@ -518,16 +536,16 @@
         <h3>La cafetería</h3>
         <p>Barra de especialidad, método por método. Mesas para trabajar, leer o encontrarte con alguien con calma. El aroma del tueste marca el ritmo de la mañana.</p>
         <div class="items">
-          <span>Espresso</span><span>Pour-over</span><span>Cold brew</span><span>Repostería</span>
+          <span>Americano</span><span>Latte</span><span>Chai</span><span>Desayunos</span>
         </div>
       </div>
 
       <div class="phase night">
-        <div class="ph-label"><span class="dot"></span>17:00 — 22:00</div>
+        <div class="ph-label"><span class="dot"></span>17:00 — 21:00</div>
         <h3>La barra</h3>
-        <p>Las mismas mesas, otra luz. Coctelería de autor, copas de vino y una selección que acompaña la conversación hasta tarde.</p>
+        <p>Las mismas mesas, otra luz. Frappés, crepas, waffles y una selección para acompañar la conversación hasta las nueve.</p>
         <div class="items">
-          <span>Coctelería</span><span>Vinos</span><span>Tabla de quesos</span><span>Música en vivo</span>
+          <span>Frappés</span><span>Crepas</span><span>Waffles</span><span>Smoothies</span>
         </div>
       </div>
     </div>
@@ -545,15 +563,21 @@
 
       <div class="acc-item open">
         <button class="acc-trigger">
-          <span><span class="num">01</span>Café</span>
+          <span><span class="num">01</span>Bebidas calientes</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Espresso<span class="desc">Doble, tueste de la casa</span></span><span class="price">L 45</span></div>
-            <div class="menu-row"><span class="name">Cappuccino<span class="desc">Leche vaporizada, canela opcional</span></span><span class="price">L 60</span></div>
-            <div class="menu-row"><span class="name">Pour-over<span class="desc">Origen Comayagua, rotativo</span></span><span class="price">L 75</span></div>
-            <div class="menu-row"><span class="name">Cold brew<span class="desc">Reposo 18 horas</span></span><span class="price">L 65</span></div>
+            <div class="menu-sizes"><span>8oz</span><span>12oz</span></div>
+            <div class="menu-row"><span class="name">Americano</span><span class="price dual"><span>L 55</span><span>L 60</span></span></div>
+            <div class="menu-row"><span class="name">Capuccino</span><span class="price dual"><span>L 70</span><span>L 75</span></span></div>
+            <div class="menu-row"><span class="name">Latte</span><span class="price dual"><span>L 70</span><span>L 75</span></span></div>
+            <div class="menu-row"><span class="name">Mocca</span><span class="price dual"><span>L 80</span><span>L 85</span></span></div>
+            <div class="menu-row"><span class="name">Caramel Latte</span><span class="price dual"><span>L 80</span><span>L 85</span></span></div>
+            <div class="menu-row"><span class="name">Chai</span><span class="price dual"><span>L 85</span><span>L 90</span></span></div>
+            <div class="menu-row"><span class="name">Dirty Chai</span><span class="price dual"><span>L 90</span><span>L 95</span></span></div>
+            <div class="menu-row"><span class="name">Chocolate</span><span class="price dual"><span>L 60</span><span>L 65</span></span></div>
+            <div class="menu-row"><span class="name">Tizana<span class="desc">10oz</span></span><span class="price">L 75</span></div>
           </div>
         </div>
       </div>
@@ -565,36 +589,75 @@
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Matcha latte<span class="desc">Con leche de coco</span></span><span class="price">L 70</span></div>
-            <div class="menu-row"><span class="name">Limonada de romero<span class="desc">Hecha en casa</span></span><span class="price">L 50</span></div>
-            <div class="menu-row"><span class="name">Frappé Aura<span class="desc">Espresso, caramelo, canela</span></span><span class="price">L 75</span></div>
+            <div class="menu-subhead">Smoothies</div>
+            <div class="menu-row"><span class="name">De temporada<span class="desc">Consultar sabor del día</span></span><span class="price">—</span></div>
+            <div class="menu-row"><span class="name">Frutos rojos</span><span class="price">L 94</span></div>
+            <div class="menu-row"><span class="name">Sandía</span><span class="price">L 80</span></div>
+            <div class="menu-row"><span class="name">Limón, fresa & menta</span><span class="price">L 90</span></div>
+            <div class="menu-row"><span class="name">Piña colada</span><span class="price">L 80</span></div>
+
+            <div class="menu-subhead">Naturales</div>
+            <div class="menu-row"><span class="name">Limón menta</span><span class="price">L 79</span></div>
+            <div class="menu-row"><span class="name">Limonada rosa</span><span class="price">L 79</span></div>
+
+            <div class="menu-subhead">Frías</div>
+            <div class="menu-row"><span class="name">Frappé de café</span><span class="price">L 85</span></div>
+            <div class="menu-row"><span class="name">Frappé de Oreo</span><span class="price">L 105</span></div>
+            <div class="menu-row"><span class="name">Iced Latte</span><span class="price">L 75</span></div>
+            <div class="menu-row"><span class="name">Iced Mocca</span><span class="price">L 79</span></div>
+            <div class="menu-row"><span class="name">Chai frío</span><span class="price">L 99</span></div>
+            <div class="menu-row"><span class="name">Dirty Chai Frappé</span><span class="price">L 110</span></div>
+            <div class="menu-row"><span class="name">Chocolate frío</span><span class="price">L 79</span></div>
           </div>
         </div>
       </div>
 
       <div class="acc-item">
         <button class="acc-trigger">
-          <span><span class="num">03</span>Coctelería</span>
+          <span><span class="num">03</span>Comidas</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Espresso martini<span class="desc">La firma de la casa</span></span><span class="price">L 180</span></div>
-            <div class="menu-row"><span class="name">Old fashioned<span class="desc">Bourbon, bitters de naranja</span></span><span class="price">L 190</span></div>
-            <div class="menu-row"><span class="name">Copa de vino<span class="desc">Tinto o blanco, consultar carta</span></span><span class="price">L 150</span></div>
+            <div class="menu-subhead">Desayunos</div>
+            <div class="menu-row"><span class="name">Pan con frijoles</span><span class="price">L 65</span></div>
+            <div class="menu-row"><span class="name">Omelette</span><span class="price">L 170</span></div>
+            <div class="menu-row"><span class="name">Desayuno típico</span><span class="price">L 170</span></div>
+            <div class="menu-row"><span class="name">Croissant</span><span class="price">L 110</span></div>
+            <div class="menu-row"><span class="name">Baleadas</span><span class="price">L 69</span></div>
+
+            <div class="menu-subhead">Platos fuertes</div>
+            <div class="menu-row"><span class="name">Alitas<span class="desc">6 piezas</span></span><span class="price">L 195</span></div>
+            <div class="menu-row"><span class="name">Chicken fingers<span class="desc">6 piezas</span></span><span class="price">L 179</span></div>
+            <div class="menu-row"><span class="name">Hamburguesa de pollo</span><span class="price">L 220</span></div>
           </div>
         </div>
       </div>
 
       <div class="acc-item">
         <button class="acc-trigger">
-          <span><span class="num">04</span>Postres</span>
+          <span><span class="num">04</span>Crepas & waffles</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Cheesecake de temporada<span class="desc">Receta rotativa</span></span><span class="price">L 85</span></div>
-            <div class="menu-row"><span class="name">Croissant de almendra<span class="desc">Horneado diario</span></span><span class="price">L 55</span></div>
+            <div class="menu-subhead">Crepas dulces</div>
+            <div class="menu-row"><span class="name">Fresa & Nutella</span><span class="price">L 155</span></div>
+            <div class="menu-row"><span class="name">Arándano & queso crema</span><span class="price">L 189</span></div>
+
+            <div class="menu-subhead">Crepas saladas</div>
+            <div class="menu-row"><span class="name">Tipo burrita</span><span class="price">L 195</span></div>
+            <div class="menu-row"><span class="name">Jamón y queso</span><span class="price">L 189</span></div>
+
+            <div class="menu-subhead">Waffles</div>
+            <div class="menu-row"><span class="name">Caramelo & fresa</span><span class="price">L 179</span></div>
+            <div class="menu-row"><span class="name">Americano</span><span class="price">L 205</span></div>
+
+            <div class="menu-subhead">Extras</div>
+            <div class="menu-row"><span class="name">Saborizantes</span><span class="price">L 30</span></div>
+            <div class="menu-row"><span class="name">Chantilly</span><span class="price">L 40</span></div>
+            <div class="menu-row"><span class="name">Fruta</span><span class="price">L 45</span></div>
+            <div class="menu-row"><span class="name">Ice cream</span><span class="price">L 45</span></div>
           </div>
         </div>
       </div>
@@ -654,15 +717,15 @@
     <div class="loc-grid">
       <div>
         <span class="tag">Visítanos</span>
-        <h2>En <span class="it">Colonia El Invá</span></h2>
+        <h2>En <span class="it">Col. Inva</span></h2>
         <div class="loc-list">
           <div class="row">
             <div class="k">Dirección</div>
-            <div class="v">Colonia El Invá, 2 cuadras arriba del Hotel Palmerola<span>Comayagua, Honduras · 12101</span></div>
+            <div class="v">Col. Inva, 2 cuadras arriba del Hotel Palmerola<span>Comayagua, Honduras · 12101</span></div>
           </div>
           <div class="row">
             <div class="k">Horario</div>
-            <div class="v">Lun – Sáb, 7:00 am – 10:00 pm<span>Domingo, 8:00 am – 5:00 pm</span></div>
+            <div class="v">Todos los días, 7:00 am – 9:00 pm</div>
           </div>
           <div class="row">
             <div class="k">WhatsApp</div>
@@ -672,7 +735,7 @@
       </div>
       <a class="map-card" href="https://maps.app.goo.gl/7MPNkHvgjAzHpLSx7" target="_blank" rel="noopener" aria-label="Abrir ubicación en Google Maps">
         <img src="images/hero.jpeg" alt="Fachada de Aura Coffee de noche">
-        <div class="cap">Colonia El Invá · Comayagua, Honduras<em>Ver en Google Maps →</em></div>
+        <div class="cap">Col. Inva · Comayagua, Honduras<em>Ver en Google Maps →</em></div>
       </a>
     </div>
   </div>
@@ -687,8 +750,9 @@
       </a>
       <div class="foot-links">
         <a href="https://wa.me/50496665971" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/aura_coffee_hn" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=100087787424993" target="_blank" rel="noopener">Facebook</a>
         <a href="https://maps.app.goo.gl/7MPNkHvgjAzHpLSx7" target="_blank" rel="noopener">Maps</a>
-        <a href="#ubicacion">Ubicación</a>
       </div>
     </div>
     <div class="foot-note">© 2026 Aura Coffee — Comayagua, Honduras.</div>
