@@ -61,12 +61,19 @@
   .brand{
     display:flex; align-items:center; gap:12px;
   }
-  .logo{
+  .logo-frame{
     width:44px; height:44px;
     border-radius:50%;
+    overflow:hidden;
+    flex-shrink:0;
+    display:block;
+  }
+  .logo{
+    width:100%; height:100%;
     object-fit:cover;
     display:block;
-    flex-shrink:0;
+    transform:scale(1.25);
+    transform-origin:center;
   }
   .logotype{
     font-family:'Fraunces', serif;
@@ -423,7 +430,7 @@
   .foot-grid{
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;
   }
-  .foot-grid .logo{width:36px; height:36px;}
+  .foot-grid .logo-frame{width:36px; height:36px;}
   .foot-grid .logotype{font-size:1.1rem;}
   .foot-links{display:flex; gap:26px; font-size:0.82rem;}
   .foot-links a{opacity:0.7; transition:opacity .3s;}
@@ -445,7 +452,7 @@
 
 <nav>
   <a href="#" class="brand" aria-label="Aura Coffee">
-    <img class="logo" src="images/logo.jpeg" alt="Aura Coffee">
+    <span class="logo-frame"><img class="logo" src="images/logo.jpeg" alt="Aura Coffee"></span>
     <span class="logotype">A<em>ura</em></span>
   </a>
   <div class="links">
@@ -648,7 +655,7 @@
   <div class="container">
     <div class="foot-grid">
       <a href="#" class="brand" aria-label="Aura Coffee">
-        <img class="logo" src="images/logo.jpeg" alt="Aura Coffee">
+        <span class="logo-frame"><img class="logo" src="images/logo.jpeg" alt="Aura Coffee"></span>
         <span class="logotype">A<em>ura</em></span>
       </a>
       <div class="foot-links">
