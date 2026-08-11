@@ -38,25 +38,31 @@
   a{color:inherit; text-decoration:none;}
   .container{max-width:1120px; margin:0 auto; padding:0 28px;}
 
-  /* ---------- glow blob (signature element) ---------- */
-  #glow{
-    position:fixed;
-    top:0; left:0;
-    width:100vw; height:100vh;
-    pointer-events:none;
-    z-index:0;
-    background:radial-gradient(560px circle at var(--gx,50%) var(--gy,20%), rgba(227,166,91,0.35), rgba(227,166,91,0) 60%);
-    transition:background 1.2s ease;
-    mix-blend-mode:screen;
-  }
-
   /* ---------- nav ---------- */
   nav{
     position:fixed; top:0; left:0; right:0; z-index:50;
     display:flex; align-items:center; justify-content:space-between;
-    padding:22px 28px;
+    padding:18px 28px;
     backdrop-filter:blur(6px);
     background:linear-gradient(to bottom, rgba(23,19,16,0.65), transparent);
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
+  .logo-frame{
+    width:44px; height:44px;
+    border-radius:50%;
+    overflow:hidden;
+    flex-shrink:0;
+    display:block;
+  }
+  .logo{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:48% 50%;
+    display:block;
+    transform:scale(1.46) translateX(2%);
+    transform-origin:center;
   }
   .logotype{
     font-family:'Fraunces', serif;
@@ -71,6 +77,15 @@
   nav .links a:hover{opacity:1;}
 
   /* ---------- hero ---------- */
+  .hero-bg{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100vh;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
   .hero{
     position:relative;
     min-height:100vh;
@@ -78,7 +93,27 @@
     flex-direction:column;
     justify-content:center;
     padding-top:110px;
-    overflow:hidden;
+    z-index:2;
+  }
+  .hero-bg img{
+    width:100%;
+    height:130%;
+    object-fit:cover;
+    object-position:center 35%;
+    will-change:transform;
+    transform:translate3d(0,0,0) scale(1.05);
+  }
+  .hero-bg::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(to right, rgba(23,19,16,0.92) 0%, rgba(23,19,16,0.72) 42%, rgba(23,19,16,0.35) 100%),
+      linear-gradient(to top, rgba(23,19,16,0.95) 0%, rgba(23,19,16,0.2) 45%, rgba(23,19,16,0.55) 100%);
+  }
+  .hero .container{
+    position:relative;
+    z-index:2;
   }
   .hero .eyebrow{
     font-size:0.78rem;
@@ -129,13 +164,19 @@
     to{opacity:1; transform:translateY(0);}
   }
 
-  /* skyline silhouette of colonial rooftops */
-  .skyline{
-    position:absolute; bottom:0; left:0; width:100%;
-    height:140px;
-    z-index:1;
+  .story,
+  .menu-section,
+  .gallery,
+  .location,
+  footer{
+    background:var(--bg-night);
+    position:relative;
+    z-index:2;
   }
-  .skyline svg{width:100%; height:100%; display:block;}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-bg img{height:100%; transform:none;}
+  }
 
   /* ---------- day/night narrative ---------- */
   .story{
@@ -223,7 +264,7 @@
     overflow:hidden;
     transition:max-height .5s ease;
   }
-  .acc-item.open .acc-panel{max-height:600px;}
+  .acc-item.open .acc-panel{max-height:2200px;}
   .acc-panel-inner{padding:0 4px 34px;}
   .menu-row{
     display:flex; justify-content:space-between; align-items:baseline;
@@ -234,7 +275,139 @@
   .menu-row:last-child{border-bottom:none;}
   .menu-row .name{color:var(--cream);}
   .menu-row .desc{display:block; color:var(--muted); font-size:0.8rem; margin-top:3px;}
-  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px;}
+  .menu-row .price{color:var(--amber-soft); font-family:'Fraunces', serif; font-style:italic; white-space:nowrap; margin-left:20px; text-align:right;}
+  .menu-subhead{
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--amber-soft);
+    margin:18px 0 6px;
+  }
+  .menu-subhead:first-child{margin-top:0;}
+  .menu-sizes{
+    display:flex; justify-content:flex-end; gap:18px;
+    font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:4px; padding-right:2px;
+  }
+  .menu-sizes span{min-width:3.2rem; text-align:right;}
+  .menu-row .price.dual{
+    display:flex; gap:18px; font-style:normal; font-family:'Fraunces', serif;
+  }
+  .menu-row .price.dual span{min-width:3.2rem; text-align:right; font-style:italic;}
+
+  /* ---------- gallery carousel ---------- */
+  .gallery{
+    position:relative; z-index:2;
+    padding:80px 0 140px;
+  }
+  .gallery .story-head{margin-bottom:40px;}
+  .gallery-head-row{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .carousel{
+    position:relative;
+    overflow:hidden;
+    touch-action:pan-y;
+  }
+  .carousel-track{
+    display:flex;
+    transition:transform .85s cubic-bezier(.22,.61,.36,1);
+    will-change:transform;
+  }
+  .carousel-slide{
+    flex:0 0 100%;
+    margin:0;
+    position:relative;
+    aspect-ratio:16/10;
+    overflow:hidden;
+  }
+  .carousel-slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transform:scale(1.04);
+    transition:transform 6.5s ease;
+  }
+  .carousel-slide.is-active img{transform:scale(1);}
+  .carousel-slide figcaption{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding:48px 28px 22px;
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    color:var(--cream);
+    background:linear-gradient(to top, rgba(23,19,16,0.88), transparent);
+  }
+  .carousel-controls{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .carousel-btn{
+    width:44px; height:44px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--cream);
+    cursor:pointer;
+    font-size:1.2rem;
+    line-height:1;
+    transition:border-color .3s, color .3s, transform .3s;
+  }
+  .carousel-btn:hover{
+    border-color:var(--amber-soft);
+    color:var(--amber-soft);
+    transform:translateY(-1px);
+  }
+  .carousel-dots{
+    display:flex;
+    gap:8px;
+    margin-top:22px;
+    justify-content:center;
+  }
+  .carousel-dots button{
+    width:8px; height:8px;
+    border-radius:50%;
+    border:none;
+    padding:0;
+    background:rgba(245,238,225,0.28);
+    cursor:pointer;
+    transition:transform .3s, background .3s;
+  }
+  .carousel-dots button[aria-current="true"]{
+    background:var(--amber);
+    transform:scale(1.35);
+  }
+  .carousel-progress{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:2px;
+    background:rgba(245,238,225,0.12);
+    overflow:hidden;
+    z-index:2;
+  }
+  .carousel-progress > span{
+    display:block;
+    height:100%;
+    width:0%;
+    background:var(--amber);
+  }
+  .carousel-progress > span.run{
+    animation:carouselFill 2.4s linear forwards;
+  }
+  @keyframes carouselFill{
+    from{width:0%;}
+    to{width:100%;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{transition:none;}
+    .carousel-slide img{transition:none; transform:none;}
+    .carousel-progress > span.run{animation:none; width:100%;}
+  }
 
   /* ---------- location ---------- */
   .location{
@@ -252,31 +425,46 @@
   }
   .loc-list .row .v{color:var(--cream); line-height:1.6;}
   .loc-list .row .v span{display:block; color:var(--muted); font-size:0.86rem;}
+  .loc-list .row .v a{
+    color:var(--cream);
+    border-bottom:1px solid rgba(227,166,91,0.35);
+    transition:color .3s, border-color .3s;
+  }
+  .loc-list .row .v a:hover{
+    color:var(--amber-soft);
+    border-color:var(--amber-soft);
+  }
 
   .map-card{
     aspect-ratio:4/5;
-    border:1px solid var(--line);
-    border-radius:4px;
     position:relative;
     overflow:hidden;
-    background:
-      radial-gradient(circle at 30% 20%, rgba(227,166,91,0.18), transparent 55%),
-      linear-gradient(160deg, #241d17, #171310 70%);
+    display:block;
+    color:inherit;
   }
-  .map-card .pin{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    width:14px; height:14px; border-radius:50%; background:var(--amber);
-    box-shadow:0 0 0 0 rgba(227,166,91,0.6);
-    animation:pulse 2.4s infinite;
+  .map-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 40%;
+    display:block;
+    transition:transform 1.1s ease;
   }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(227,166,91,0.55);}
-    70%{box-shadow:0 0 0 26px rgba(227,166,91,0);}
-    100%{box-shadow:0 0 0 0 rgba(227,166,91,0);}
-  }
+  .map-card:hover img{transform:scale(1.03);}
   .map-card .cap{
-    position:absolute; bottom:24px; left:24px; right:24px;
-    font-size:0.78rem; color:var(--muted); letter-spacing:0.03em;
+    position:absolute; bottom:0; left:0; right:0;
+    padding:48px 24px 24px;
+    font-size:0.78rem; color:var(--cream); letter-spacing:0.03em;
+    background:linear-gradient(to top, rgba(23,19,16,0.9), transparent);
+  }
+  .map-card .cap em{
+    display:block;
+    margin-top:6px;
+    font-style:normal;
+    color:var(--amber-soft);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-size:0.68rem;
   }
 
   /* ---------- footer ---------- */
@@ -288,6 +476,7 @@
   .foot-grid{
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;
   }
+  .foot-grid .logo-frame{width:36px; height:36px;}
   .foot-grid .logotype{font-size:1.1rem;}
   .foot-links{display:flex; gap:26px; font-size:0.82rem;}
   .foot-links a{opacity:0.7; transition:opacity .3s;}
@@ -298,36 +487,39 @@
     .story-grid, .loc-grid{grid-template-columns:1fr;}
     nav .links{display:none;}
     .map-card{aspect-ratio:16/10;}
+    .carousel-slide{aspect-ratio:4/5;}
+    .gallery-head-row{align-items:flex-start;}
   }
 </style>
 </head>
 <body>
 
-<div id="glow"></div>
+<div class="hero-bg" aria-hidden="true">
+  <img src="images/hero.jpeg" alt="">
+</div>
 
 <nav>
-  <div class="logotype">A<em>ura</em></div>
+  <a href="#" class="brand" aria-label="Aura Coffee">
+    <span class="logo-frame"><img class="logo" src="images/logo.jpeg" alt="Aura Coffee"></span>
+    <span class="logotype">A<em>ura</em></span>
+  </a>
   <div class="links">
     <a href="#historia">Historia</a>
     <a href="#menu">Menú</a>
+    <a href="#galeria">Galería</a>
     <a href="#ubicacion">Ubicación</a>
   </div>
 </nav>
 
 <section class="hero">
   <div class="container">
-    <span class="eyebrow">Comayagua · La Antañona</span>
+    <span class="eyebrow">Comayagua · Col. Inva</span>
     <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
-    <p class="sub">A pasos del parque central, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>coctelería y música</strong> cuando cae el sol.</p>
+    <p class="sub">Cerca del Hotel Palmerola, un espacio que cambia con la luz: <strong>espresso y pastelería</strong> por la mañana, <strong>crepas, waffles y más</strong> cuando apetece quedarse.</p>
     <div class="hero-cta">
       <a href="#menu" class="btn btn-solid">Ver el menú</a>
       <a href="#ubicacion" class="btn btn-line">Cómo llegar</a>
     </div>
-  </div>
-  <div class="skyline">
-    <svg viewBox="0 0 1200 140" preserveAspectRatio="none">
-      <path d="M0,140 L0,90 L40,90 L40,60 L60,60 L60,90 L100,90 L100,45 L120,20 L140,45 L140,90 L190,90 L190,70 L220,70 L220,90 L270,90 L270,50 L290,50 L290,30 L310,30 L310,50 L330,50 L330,90 L400,90 L400,65 L430,65 L430,90 L480,90 L480,40 L500,15 L520,40 L520,90 L580,90 L580,72 L610,72 L610,90 L660,90 L660,55 L680,55 L680,35 L700,35 L700,55 L720,55 L720,90 L790,90 L790,68 L820,68 L820,90 L880,90 L880,42 L900,18 L920,42 L920,90 L980,90 L980,75 L1010,75 L1010,90 L1060,90 L1060,58 L1080,58 L1080,90 L1130,90 L1130,72 L1160,72 L1160,90 L1200,90 L1200,140 Z" fill="#171310"/>
-    </svg>
   </div>
 </section>
 
@@ -344,16 +536,16 @@
         <h3>La cafetería</h3>
         <p>Barra de especialidad, método por método. Mesas para trabajar, leer o encontrarte con alguien con calma. El aroma del tueste marca el ritmo de la mañana.</p>
         <div class="items">
-          <span>Espresso</span><span>Pour-over</span><span>Cold brew</span><span>Repostería</span>
+          <span>Americano</span><span>Latte</span><span>Chai</span><span>Desayunos</span>
         </div>
       </div>
 
       <div class="phase night">
-        <div class="ph-label"><span class="dot"></span>17:00 — 22:00</div>
+        <div class="ph-label"><span class="dot"></span>17:00 — 21:00</div>
         <h3>La barra</h3>
-        <p>Las mismas mesas, otra luz. Coctelería de autor, copas de vino y una selección que acompaña la conversación hasta tarde.</p>
+        <p>Las mismas mesas, otra luz. Frappés, crepas, waffles y una selección para acompañar la conversación hasta las nueve.</p>
         <div class="items">
-          <span>Coctelería</span><span>Vinos</span><span>Tabla de quesos</span><span>Música en vivo</span>
+          <span>Frappés</span><span>Crepas</span><span>Waffles</span><span>Smoothies</span>
         </div>
       </div>
     </div>
@@ -371,15 +563,21 @@
 
       <div class="acc-item open">
         <button class="acc-trigger">
-          <span><span class="num">01</span>Café</span>
+          <span><span class="num">01</span>Bebidas calientes</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Espresso<span class="desc">Doble, tueste de la casa</span></span><span class="price">L 45</span></div>
-            <div class="menu-row"><span class="name">Cappuccino<span class="desc">Leche vaporizada, canela opcional</span></span><span class="price">L 60</span></div>
-            <div class="menu-row"><span class="name">Pour-over<span class="desc">Origen Comayagua, rotativo</span></span><span class="price">L 75</span></div>
-            <div class="menu-row"><span class="name">Cold brew<span class="desc">Reposo 18 horas</span></span><span class="price">L 65</span></div>
+            <div class="menu-sizes"><span>8oz</span><span>12oz</span></div>
+            <div class="menu-row"><span class="name">Americano</span><span class="price dual"><span>L 55</span><span>L 60</span></span></div>
+            <div class="menu-row"><span class="name">Capuccino</span><span class="price dual"><span>L 70</span><span>L 75</span></span></div>
+            <div class="menu-row"><span class="name">Latte</span><span class="price dual"><span>L 70</span><span>L 75</span></span></div>
+            <div class="menu-row"><span class="name">Mocca</span><span class="price dual"><span>L 80</span><span>L 85</span></span></div>
+            <div class="menu-row"><span class="name">Caramel Latte</span><span class="price dual"><span>L 80</span><span>L 85</span></span></div>
+            <div class="menu-row"><span class="name">Chai</span><span class="price dual"><span>L 85</span><span>L 90</span></span></div>
+            <div class="menu-row"><span class="name">Dirty Chai</span><span class="price dual"><span>L 90</span><span>L 95</span></span></div>
+            <div class="menu-row"><span class="name">Chocolate</span><span class="price dual"><span>L 60</span><span>L 65</span></span></div>
+            <div class="menu-row"><span class="name">Tizana<span class="desc">10oz</span></span><span class="price">L 75</span></div>
           </div>
         </div>
       </div>
@@ -391,41 +589,126 @@
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Matcha latte<span class="desc">Con leche de coco</span></span><span class="price">L 70</span></div>
-            <div class="menu-row"><span class="name">Limonada de romero<span class="desc">Hecha en casa</span></span><span class="price">L 50</span></div>
-            <div class="menu-row"><span class="name">Frappé Aura<span class="desc">Espresso, caramelo, canela</span></span><span class="price">L 75</span></div>
+            <div class="menu-subhead">Smoothies</div>
+            <div class="menu-row"><span class="name">De temporada<span class="desc">Consultar sabor del día</span></span><span class="price">—</span></div>
+            <div class="menu-row"><span class="name">Frutos rojos</span><span class="price">L 94</span></div>
+            <div class="menu-row"><span class="name">Sandía</span><span class="price">L 80</span></div>
+            <div class="menu-row"><span class="name">Limón, fresa & menta</span><span class="price">L 90</span></div>
+            <div class="menu-row"><span class="name">Piña colada</span><span class="price">L 80</span></div>
+
+            <div class="menu-subhead">Naturales</div>
+            <div class="menu-row"><span class="name">Limón menta</span><span class="price">L 79</span></div>
+            <div class="menu-row"><span class="name">Limonada rosa</span><span class="price">L 79</span></div>
+
+            <div class="menu-subhead">Frías</div>
+            <div class="menu-row"><span class="name">Frappé de café</span><span class="price">L 85</span></div>
+            <div class="menu-row"><span class="name">Frappé de Oreo</span><span class="price">L 105</span></div>
+            <div class="menu-row"><span class="name">Iced Latte</span><span class="price">L 75</span></div>
+            <div class="menu-row"><span class="name">Iced Mocca</span><span class="price">L 79</span></div>
+            <div class="menu-row"><span class="name">Chai frío</span><span class="price">L 99</span></div>
+            <div class="menu-row"><span class="name">Dirty Chai Frappé</span><span class="price">L 110</span></div>
+            <div class="menu-row"><span class="name">Chocolate frío</span><span class="price">L 79</span></div>
           </div>
         </div>
       </div>
 
       <div class="acc-item">
         <button class="acc-trigger">
-          <span><span class="num">03</span>Coctelería</span>
+          <span><span class="num">03</span>Comidas</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Espresso martini<span class="desc">La firma de la casa</span></span><span class="price">L 180</span></div>
-            <div class="menu-row"><span class="name">Old fashioned<span class="desc">Bourbon, bitters de naranja</span></span><span class="price">L 190</span></div>
-            <div class="menu-row"><span class="name">Copa de vino<span class="desc">Tinto o blanco, consultar carta</span></span><span class="price">L 150</span></div>
+            <div class="menu-subhead">Desayunos</div>
+            <div class="menu-row"><span class="name">Pan con frijoles</span><span class="price">L 65</span></div>
+            <div class="menu-row"><span class="name">Omelette</span><span class="price">L 170</span></div>
+            <div class="menu-row"><span class="name">Desayuno típico</span><span class="price">L 170</span></div>
+            <div class="menu-row"><span class="name">Croissant</span><span class="price">L 110</span></div>
+            <div class="menu-row"><span class="name">Baleadas</span><span class="price">L 69</span></div>
+
+            <div class="menu-subhead">Platos fuertes</div>
+            <div class="menu-row"><span class="name">Alitas<span class="desc">6 piezas</span></span><span class="price">L 195</span></div>
+            <div class="menu-row"><span class="name">Chicken fingers<span class="desc">6 piezas</span></span><span class="price">L 179</span></div>
+            <div class="menu-row"><span class="name">Hamburguesa de pollo</span><span class="price">L 220</span></div>
           </div>
         </div>
       </div>
 
       <div class="acc-item">
         <button class="acc-trigger">
-          <span><span class="num">04</span>Postres</span>
+          <span><span class="num">04</span>Crepas & waffles</span>
           <span class="plus">+</span>
         </button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div class="menu-row"><span class="name">Cheesecake de temporada<span class="desc">Receta rotativa</span></span><span class="price">L 85</span></div>
-            <div class="menu-row"><span class="name">Croissant de almendra<span class="desc">Horneado diario</span></span><span class="price">L 55</span></div>
+            <div class="menu-subhead">Crepas dulces</div>
+            <div class="menu-row"><span class="name">Fresa & Nutella</span><span class="price">L 155</span></div>
+            <div class="menu-row"><span class="name">Arándano & queso crema</span><span class="price">L 189</span></div>
+
+            <div class="menu-subhead">Crepas saladas</div>
+            <div class="menu-row"><span class="name">Tipo burrita</span><span class="price">L 195</span></div>
+            <div class="menu-row"><span class="name">Jamón y queso</span><span class="price">L 189</span></div>
+
+            <div class="menu-subhead">Waffles</div>
+            <div class="menu-row"><span class="name">Caramelo & fresa</span><span class="price">L 179</span></div>
+            <div class="menu-row"><span class="name">Americano</span><span class="price">L 205</span></div>
+
+            <div class="menu-subhead">Extras</div>
+            <div class="menu-row"><span class="name">Saborizantes</span><span class="price">L 30</span></div>
+            <div class="menu-row"><span class="name">Chantilly</span><span class="price">L 40</span></div>
+            <div class="menu-row"><span class="name">Fruta</span><span class="price">L 45</span></div>
+            <div class="menu-row"><span class="name">Ice cream</span><span class="price">L 45</span></div>
           </div>
         </div>
       </div>
 
     </div>
+  </div>
+</section>
+
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gallery-head-row">
+      <div class="story-head" style="margin-bottom:0;max-width:640px;">
+        <span class="tag">Galería</span>
+        <h2>Lo que se vive en <span class="it">Aura</span></h2>
+      </div>
+      <div class="carousel-controls">
+        <button type="button" class="carousel-btn" data-carousel-prev aria-label="Foto anterior">‹</button>
+        <button type="button" class="carousel-btn" data-carousel-next aria-label="Foto siguiente">›</button>
+      </div>
+    </div>
+
+    <div class="carousel" data-carousel aria-roledescription="carrusel" aria-label="Galería de Aura Coffee">
+      <div class="carousel-track">
+        <figure class="carousel-slide is-active">
+          <img src="images/gallery/IMG_0177.jpeg" alt="Birria tacos con consomé" loading="eager">
+          <figcaption>Birria · consomé</figcaption>
+        </figure>
+        <figure class="carousel-slide">
+          <img src="images/gallery/IMG_0182.jpeg" alt="Orden de tacos birria" loading="lazy">
+          <figcaption>Tacos de la casa</figcaption>
+        </figure>
+        <figure class="carousel-slide">
+          <img src="images/gallery/IMG_0181.jpeg" alt="Crepe con crema y fresas" loading="lazy">
+          <figcaption>Crepe dulce</figcaption>
+        </figure>
+        <figure class="carousel-slide">
+          <img src="images/gallery/IMG_0178.jpeg" alt="Chocolate caliente con marshmallows" loading="lazy">
+          <figcaption>Chocolate de noche</figcaption>
+        </figure>
+        <figure class="carousel-slide">
+          <img src="images/gallery/IMG_0183.jpeg" alt="Café helado con crema batida" loading="lazy">
+          <figcaption>Café helado</figcaption>
+        </figure>
+        <figure class="carousel-slide">
+          <img src="images/gallery/IMG_0179.jpeg" alt="Waffles para llevar" loading="lazy">
+          <figcaption>Waffles para llevar</figcaption>
+        </figure>
+      </div>
+      <div class="carousel-progress" aria-hidden="true"><span></span></div>
+    </div>
+    <div class="carousel-dots" data-carousel-dots></div>
   </div>
 </section>
 
@@ -434,26 +717,26 @@
     <div class="loc-grid">
       <div>
         <span class="tag">Visítanos</span>
-        <h2>En el centro de <span class="it">la Antañona</span></h2>
+        <h2>En <span class="it">Col. Inva</span></h2>
         <div class="loc-list">
           <div class="row">
             <div class="k">Dirección</div>
-            <div class="v">A pasos del Parque Central<span>Comayagua, Honduras</span></div>
+            <div class="v">Col. Inva, 2 cuadras arriba del Hotel Palmerola<span>Comayagua, Honduras · 12101</span></div>
           </div>
           <div class="row">
             <div class="k">Horario</div>
-            <div class="v">Lun – Sáb, 7:00 am – 10:00 pm<span>Domingo, 8:00 am – 5:00 pm</span></div>
+            <div class="v">Todos los días, 7:00 am – 9:00 pm</div>
           </div>
           <div class="row">
-            <div class="k">Contacto</div>
-            <div class="v">+504 0000-0000<span>@aura_coffee_hn</span></div>
+            <div class="k">WhatsApp</div>
+            <div class="v"><a href="https://wa.me/50496665971" target="_blank" rel="noopener">+504 9666-5971</a><span>Escríbenos para pedidos o reservaciones</span></div>
           </div>
         </div>
       </div>
-      <div class="map-card">
-        <div class="pin"></div>
-        <div class="cap">Comayagua, Honduras — a pasos del Parque Central</div>
-      </div>
+      <a class="map-card" href="https://maps.app.goo.gl/7MPNkHvgjAzHpLSx7" target="_blank" rel="noopener" aria-label="Abrir ubicación en Google Maps">
+        <img src="images/hero.jpeg" alt="Fachada de Aura Coffee de noche">
+        <div class="cap">Col. Inva · Comayagua, Honduras<em>Ver en Google Maps →</em></div>
+      </a>
     </div>
   </div>
 </section>
@@ -461,11 +744,15 @@
 <footer>
   <div class="container">
     <div class="foot-grid">
-      <div class="logotype">A<em>ura</em></div>
+      <a href="#" class="brand" aria-label="Aura Coffee">
+        <span class="logo-frame"><img class="logo" src="images/logo.jpeg" alt="Aura Coffee"></span>
+        <span class="logotype">A<em>ura</em></span>
+      </a>
       <div class="foot-links">
-        <a href="#" target="_blank">Instagram</a>
-        <a href="#" target="_blank">Facebook</a>
-        <a href="#ubicacion">Ubicación</a>
+        <a href="https://wa.me/50496665971" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/aura_coffee_hn" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=100087787424993" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://maps.app.goo.gl/7MPNkHvgjAzHpLSx7" target="_blank" rel="noopener">Maps</a>
       </div>
     </div>
     <div class="foot-note">© 2026 Aura Coffee — Comayagua, Honduras.</div>
@@ -473,38 +760,27 @@
 </footer>
 
 <script>
-  // glow follows scroll: shifts from warm amber (day) near top
-  // to deeper wine tone (night) as user scrolls into the bar section
-  const glow = document.getElementById('glow');
-  const nightSection = document.querySelector('.phase.night');
-  const dayColor = ['227,166,91'];
-  const nightColor = ['122,46,58'];
-
-  function lerp(a,b,t){return a+(b-a)*t;}
+  // Fixed hero: photo rises slowly while copy scrolls away at full speed
+  const heroBgImg = document.querySelector('.hero-bg img');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function onScroll(){
-    const docH = document.documentElement.scrollHeight - window.innerHeight;
-    const p = Math.min(Math.max(window.scrollY / docH, 0), 1);
-    // color shift concentrated across the story section
-    const dayRGB = [227,166,91];
-    const nightRGB = [122,46,58];
-    const t = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
-    const r = Math.round(lerp(dayRGB[0], nightRGB[0], t));
-    const g = Math.round(lerp(dayRGB[1], nightRGB[1], t));
-    const b = Math.round(lerp(dayRGB[2], nightRGB[2], t));
-    glow.style.background = `radial-gradient(620px circle at 50% ${20 + p*10}%, rgba(${r},${g},${b},0.32), rgba(${r},${g},${b},0) 60%)`;
+    if(reduceMotion || !heroBgImg) return;
+    const y = window.scrollY || 0;
+    // Negative Y = image climbs upward, but only ~20% of scroll speed
+    heroBgImg.style.transform = `translate3d(0, ${-y * 0.2}px, 0) scale(1.05)`;
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
 
   // reveal phases on scroll
-  const phases = document.querySelectorAll('.phase');
+  const revealables = document.querySelectorAll('.phase');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){ e.target.classList.add('in'); }
     });
-  }, {threshold:0.25});
-  phases.forEach(p=>io.observe(p));
+  }, {threshold:0.2});
+  revealables.forEach(p=>io.observe(p));
 
   // accordion
   document.querySelectorAll('.acc-trigger').forEach(btn=>{
@@ -515,6 +791,119 @@
       if(!wasOpen){ item.classList.add('open'); }
     });
   });
+
+  // live gallery carousel
+  (function initCarousel(){
+    const root = document.querySelector('[data-carousel]');
+    if(!root) return;
+    const track = root.querySelector('.carousel-track');
+    const slides = Array.from(root.querySelectorAll('.carousel-slide'));
+    const dotsWrap = document.querySelector('[data-carousel-dots]');
+    const prevBtn = document.querySelector('[data-carousel-prev]');
+    const nextBtn = document.querySelector('[data-carousel-next]');
+    const progress = root.querySelector('.carousel-progress > span');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const INTERVAL = 2400;
+    let index = 0;
+    let timer = null;
+    let paused = false;
+
+    slides.forEach((_, i)=>{
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Ir a foto ${i+1}`);
+      if(i === 0) dot.setAttribute('aria-current', 'true');
+      dot.addEventListener('click', ()=>goTo(i, true));
+      dotsWrap.appendChild(dot);
+    });
+    const dots = Array.from(dotsWrap.children);
+
+    function render(){
+      track.style.transform = `translateX(-${index * 100}%)`;
+      slides.forEach((s,i)=>s.classList.toggle('is-active', i === index));
+      dots.forEach((d,i)=>{
+        if(i === index) d.setAttribute('aria-current', 'true');
+        else d.removeAttribute('aria-current');
+      });
+      if(progress){
+        progress.classList.remove('run');
+        void progress.offsetWidth;
+        if(!paused && !reduceMotion) progress.classList.add('run');
+      }
+    }
+
+    function goTo(i, userDriven){
+      index = (i + slides.length) % slides.length;
+      render();
+      if(userDriven) restart();
+    }
+
+    function next(){ goTo(index + 1, false); }
+    function prev(){ goTo(index - 1, false); }
+
+    function stop(){
+      if(timer){ clearInterval(timer); timer = null; }
+      if(progress) progress.classList.remove('run');
+    }
+
+    function start(){
+      if(reduceMotion || paused) return;
+      stop();
+      if(progress){
+        progress.classList.remove('run');
+        void progress.offsetWidth;
+        progress.classList.add('run');
+      }
+      timer = setInterval(next, INTERVAL);
+    }
+
+    function restart(){
+      stop();
+      start();
+    }
+
+    function setPaused(v){
+      paused = v;
+      if(paused) stop();
+      else start();
+    }
+
+    prevBtn && prevBtn.addEventListener('click', ()=>{ prev(); restart(); });
+    nextBtn && nextBtn.addEventListener('click', ()=>{ next(); restart(); });
+
+    root.addEventListener('mouseenter', ()=>setPaused(true));
+    root.addEventListener('mouseleave', ()=>setPaused(false));
+    root.addEventListener('focusin', ()=>setPaused(true));
+    root.addEventListener('focusout', (e)=>{
+      if(!root.contains(e.relatedTarget)) setPaused(false);
+    });
+
+    document.addEventListener('visibilitychange', ()=>{
+      if(document.hidden) stop();
+      else if(!paused) start();
+    });
+
+    // swipe
+    let startX = 0;
+    root.addEventListener('touchstart', (e)=>{ startX = e.changedTouches[0].clientX; }, {passive:true});
+    root.addEventListener('touchend', (e)=>{
+      const dx = e.changedTouches[0].clientX - startX;
+      if(Math.abs(dx) < 40) return;
+      if(dx < 0) next(); else prev();
+      restart();
+    }, {passive:true});
+
+    // autoplay when gallery enters view
+    const galleryIo = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) start();
+        else stop();
+      });
+    }, {threshold:0.35});
+    galleryIo.observe(root);
+
+    render();
+  })();
 </script>
 
 </body>
