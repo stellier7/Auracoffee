@@ -407,11 +407,22 @@
   }
   .loc-list .row .v{color:var(--cream); line-height:1.6;}
   .loc-list .row .v span{display:block; color:var(--muted); font-size:0.86rem;}
+  .loc-list .row .v a{
+    color:var(--cream);
+    border-bottom:1px solid rgba(227,166,91,0.35);
+    transition:color .3s, border-color .3s;
+  }
+  .loc-list .row .v a:hover{
+    color:var(--amber-soft);
+    border-color:var(--amber-soft);
+  }
 
   .map-card{
     aspect-ratio:4/5;
     position:relative;
     overflow:hidden;
+    display:block;
+    color:inherit;
   }
   .map-card img{
     width:100%;
@@ -419,12 +430,23 @@
     object-fit:cover;
     object-position:center 40%;
     display:block;
+    transition:transform 1.1s ease;
   }
+  .map-card:hover img{transform:scale(1.03);}
   .map-card .cap{
     position:absolute; bottom:0; left:0; right:0;
     padding:48px 24px 24px;
     font-size:0.78rem; color:var(--cream); letter-spacing:0.03em;
     background:linear-gradient(to top, rgba(23,19,16,0.9), transparent);
+  }
+  .map-card .cap em{
+    display:block;
+    margin-top:6px;
+    font-style:normal;
+    color:var(--amber-soft);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-size:0.68rem;
   }
 
   /* ---------- footer ---------- */
