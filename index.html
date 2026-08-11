@@ -38,18 +38,6 @@
   a{color:inherit; text-decoration:none;}
   .container{max-width:1120px; margin:0 auto; padding:0 28px;}
 
-  /* ---------- glow blob (signature element) ---------- */
-  #glow{
-    position:fixed;
-    top:0; left:0;
-    width:100vw; height:100vh;
-    pointer-events:none;
-    z-index:0;
-    background:radial-gradient(560px circle at var(--gx,50%) var(--gy,20%), rgba(227,166,91,0.35), rgba(227,166,91,0) 60%);
-    transition:background 1.2s ease;
-    mix-blend-mode:screen;
-  }
-
   /* ---------- nav ---------- */
   nav{
     position:fixed; top:0; left:0; right:0; z-index:50;
@@ -98,7 +86,6 @@
     pointer-events:none;
     overflow:hidden;
   }
-  #glow{z-index:1;}
   .hero{
     position:relative;
     min-height:100vh;
@@ -110,11 +97,11 @@
   }
   .hero-bg img{
     width:100%;
-    height:120%;
+    height:130%;
     object-fit:cover;
     object-position:center 35%;
     will-change:transform;
-    transform:translate3d(0,0,0) scale(1.08);
+    transform:translate3d(0,0,0) scale(1.05);
   }
   .hero-bg::after{
     content:'';
@@ -127,7 +114,6 @@
   .hero .container{
     position:relative;
     z-index:2;
-    will-change:transform;
   }
   .hero .eyebrow{
     font-size:0.78rem;
@@ -468,8 +454,6 @@
 </head>
 <body>
 
-<div id="glow"></div>
-
 <div class="hero-bg" aria-hidden="true">
   <img src="images/hero.jpeg" alt="">
 </div>
@@ -690,41 +674,15 @@
 </footer>
 
 <script>
-  // glow + fixed-hero parallax
-  const glow = document.getElementById('glow');
+  // Fixed hero: photo rises slowly while copy scrolls away at full speed
   const heroBgImg = document.querySelector('.hero-bg img');
-  const heroCopy = document.querySelector('.hero .container');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function lerp(a,b,t){return a+(b-a)*t;}
-
   function onScroll(){
+    if(reduceMotion || !heroBgImg) return;
     const y = window.scrollY || 0;
-    const docH = document.documentElement.scrollHeight - window.innerHeight;
-    const p = Math.min(Math.max(y / Math.max(docH, 1), 0), 1);
-    const dayRGB = [227,166,91];
-    const nightRGB = [122,46,58];
-    const t = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
-    const r = Math.round(lerp(dayRGB[0], nightRGB[0], t));
-    const g = Math.round(lerp(dayRGB[1], nightRGB[1], t));
-    const b = Math.round(lerp(dayRGB[2], nightRGB[2], t));
-    glow.style.background = `radial-gradient(620px circle at 50% ${20 + p*10}%, rgba(${r},${g},${b},0.32), rgba(${r},${g},${b},0) 60%)`;
-
-    if(!reduceMotion){
-      // Background moves slower than scroll (fixed + gentle drift)
-      if(heroBgImg){
-        const bgY = y * 0.28;
-        const bgScale = 1.08 + Math.min(y / 2400, 0.06);
-        heroBgImg.style.transform = `translate3d(0, ${bgY}px, 0) scale(${bgScale})`;
-      }
-      // Copy eases upward a touch faster for depth
-      if(heroCopy){
-        const copyY = y * 0.18;
-        const copyFade = Math.max(1 - y / (window.innerHeight * 0.85), 0);
-        heroCopy.style.transform = `translate3d(0, ${copyY}px, 0)`;
-        heroCopy.style.opacity = String(copyFade);
-      }
-    }
+    // Negative Y = image climbs upward, but only ~20% of scroll speed
+    heroBgImg.style.transform = `translate3d(0, ${-y * 0.2}px, 0) scale(1.05)`;
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
