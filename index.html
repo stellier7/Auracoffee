@@ -89,6 +89,16 @@
   nav .links a:hover{opacity:1;}
 
   /* ---------- hero ---------- */
+  .hero-bg{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100vh;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  #glow{z-index:1;}
   .hero{
     position:relative;
     min-height:100vh;
@@ -96,20 +106,15 @@
     flex-direction:column;
     justify-content:center;
     padding-top:110px;
-    overflow:hidden;
-  }
-  .hero-bg{
-    position:absolute;
-    inset:0;
-    z-index:0;
+    z-index:2;
   }
   .hero-bg img{
     width:100%;
-    height:100%;
+    height:120%;
     object-fit:cover;
     object-position:center 35%;
-    transform:scale(1.06);
-    animation:heroDrift 18s ease-in-out infinite alternate;
+    will-change:transform;
+    transform:translate3d(0,0,0) scale(1.08);
   }
   .hero-bg::after{
     content:'';
@@ -119,7 +124,11 @@
       linear-gradient(to right, rgba(23,19,16,0.92) 0%, rgba(23,19,16,0.72) 42%, rgba(23,19,16,0.35) 100%),
       linear-gradient(to top, rgba(23,19,16,0.95) 0%, rgba(23,19,16,0.2) 45%, rgba(23,19,16,0.55) 100%);
   }
-  .hero .container{position:relative; z-index:2;}
+  .hero .container{
+    position:relative;
+    z-index:2;
+    will-change:transform;
+  }
   .hero .eyebrow{
     font-size:0.78rem;
     letter-spacing:0.22em;
@@ -168,9 +177,19 @@
     from{opacity:0; transform:translateY(22px);}
     to{opacity:1; transform:translateY(0);}
   }
-  @keyframes heroDrift{
-    from{transform:scale(1.06) translate3d(0,0,0);}
-    to{transform:scale(1.12) translate3d(-1.5%, -1%, 0);}
+
+  .story,
+  .menu-section,
+  .gallery,
+  .location,
+  footer{
+    background:var(--bg-night);
+    position:relative;
+    z-index:2;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-bg img{height:100%; transform:none;}
   }
 
   /* ---------- day/night narrative ---------- */
@@ -451,6 +470,10 @@
 
 <div id="glow"></div>
 
+<div class="hero-bg" aria-hidden="true">
+  <img src="images/hero.jpeg" alt="">
+</div>
+
 <nav>
   <a href="#" class="brand" aria-label="Aura Coffee">
     <span class="logo-frame"><img class="logo" src="images/logo.jpeg" alt="Aura Coffee"></span>
@@ -465,9 +488,6 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <img src="images/hero.jpeg" alt="">
-  </div>
   <div class="container">
     <span class="eyebrow">Comayagua · La Antañona</span>
     <h1>Café de día,<br><span class="it">aura</span> de noche.</h1>
@@ -670,19 +690,18 @@
 </footer>
 
 <script>
-  // glow follows scroll: shifts from warm amber (day) near top
-  // to deeper wine tone (night) as user scrolls into the bar section
+  // glow + fixed-hero parallax
   const glow = document.getElementById('glow');
-  const nightSection = document.querySelector('.phase.night');
-  const dayColor = ['227,166,91'];
-  const nightColor = ['122,46,58'];
+  const heroBgImg = document.querySelector('.hero-bg img');
+  const heroCopy = document.querySelector('.hero .container');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function lerp(a,b,t){return a+(b-a)*t;}
 
   function onScroll(){
+    const y = window.scrollY || 0;
     const docH = document.documentElement.scrollHeight - window.innerHeight;
-    const p = Math.min(Math.max(window.scrollY / docH, 0), 1);
-    // color shift concentrated across the story section
+    const p = Math.min(Math.max(y / Math.max(docH, 1), 0), 1);
     const dayRGB = [227,166,91];
     const nightRGB = [122,46,58];
     const t = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
@@ -690,6 +709,22 @@
     const g = Math.round(lerp(dayRGB[1], nightRGB[1], t));
     const b = Math.round(lerp(dayRGB[2], nightRGB[2], t));
     glow.style.background = `radial-gradient(620px circle at 50% ${20 + p*10}%, rgba(${r},${g},${b},0.32), rgba(${r},${g},${b},0) 60%)`;
+
+    if(!reduceMotion){
+      // Background moves slower than scroll (fixed + gentle drift)
+      if(heroBgImg){
+        const bgY = y * 0.28;
+        const bgScale = 1.08 + Math.min(y / 2400, 0.06);
+        heroBgImg.style.transform = `translate3d(0, ${bgY}px, 0) scale(${bgScale})`;
+      }
+      // Copy eases upward a touch faster for depth
+      if(heroCopy){
+        const copyY = y * 0.18;
+        const copyFade = Math.max(1 - y / (window.innerHeight * 0.85), 0);
+        heroCopy.style.transform = `translate3d(0, ${copyY}px, 0)`;
+        heroCopy.style.opacity = String(copyFade);
+      }
+    }
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
